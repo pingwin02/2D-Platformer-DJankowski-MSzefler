@@ -12,7 +12,7 @@ public class FoxController : MonoBehaviour
 
     public LayerMask groundLayer;
 
-    const float rayLength = 1.25f;
+    const float rayLength = 1.00f;
 
     // Start is called before the first frame update
     void Start()
@@ -30,7 +30,11 @@ public class FoxController : MonoBehaviour
         if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space))
             Jump();
 
-        //Debug.DrawRay(transform.position, rayLength * Vector3.down, Color.white, 1, false);
+        /*
+        Debug.DrawRay(transform.position, rayLength * Vector3.down, Color.white, 1, false);
+        Debug.DrawRay(transform.position - new Vector3(0.5f, 0, 0), rayLength * Vector3.down, Color.white, 1, false);
+        Debug.DrawRay(transform.position + new Vector3(0.5f, 0, 0), rayLength * Vector3.down, Color.white, 1, false);
+        */
     }
     void Awake()
     {
@@ -38,9 +42,11 @@ public class FoxController : MonoBehaviour
     }
 
     bool isGrounded() 
-    { 
-        return Physics2D.Raycast(this.transform.position, Vector2.down, rayLength, groundLayer.value); 
-    }
+    {
+        return (Physics2D.Raycast(transform.position - new Vector3(0.5f, 0, 0), Vector2.down, rayLength, groundLayer.value) ||
+            Physics2D.Raycast(transform.position + new Vector3(0.5f, 0, 0), Vector2.down, rayLength, groundLayer.value) ||
+            Physics2D.Raycast(this.transform.position, Vector2.down, rayLength, groundLayer.value));
+}
 
     void Jump()
     {
