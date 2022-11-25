@@ -71,9 +71,10 @@ public class PirateController : MonoBehaviour
 
         /*
         Debug.DrawRay(transform.position, rayLength * Vector3.down, Color.white, 1, false);
-        Debug.DrawRay(transform.position - new Vector3(0.5f, 0, 0), rayLength * Vector3.down, Color.white, 1, false);
-        Debug.DrawRay(transform.position + new Vector3(0.5f, 0, 0), rayLength * Vector3.down, Color.white, 1, false);
+        Debug.DrawRay(transform.position - new Vector3(0.3f, 0, 0), rayLength * Vector3.down, Color.white, 1, false);
+        Debug.DrawRay(transform.position + new Vector3(0.3f, 0, 0), rayLength * Vector3.down, Color.white, 1, false);
         */
+
         animator.SetBool("isWalking", isWalking);
         animator.SetBool("isGrounded", isGrounded());
     }
@@ -86,8 +87,8 @@ public class PirateController : MonoBehaviour
 
     bool isGrounded() 
     {
-        return (Physics2D.Raycast(transform.position - new Vector3(0.5f, 0, 0), Vector2.down, rayLength, groundLayer.value) ||
-            Physics2D.Raycast(transform.position + new Vector3(0.5f, 0, 0), Vector2.down, rayLength, groundLayer.value) ||
+        return (Physics2D.Raycast(transform.position - new Vector3(0.3f, 0, 0), Vector2.down, rayLength, groundLayer.value) ||
+            Physics2D.Raycast(transform.position + new Vector3(0.3f, 0, 0), Vector2.down, rayLength, groundLayer.value) ||
             Physics2D.Raycast(this.transform.position, Vector2.down, rayLength, groundLayer.value));
 }
 
