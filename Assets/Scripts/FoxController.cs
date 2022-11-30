@@ -77,6 +77,7 @@ public class FoxController : MonoBehaviour
 
         animator.SetBool("isWalking", isWalking);
         animator.SetBool("isGrounded", isGrounded());
+        animator.SetBool("isDead", false);
     }
     void Awake()
     {
@@ -109,7 +110,9 @@ public class FoxController : MonoBehaviour
     public void Die()
     {
         active = false;
+        animator.SetBool("isDead", true);
         _collider.enabled = false;
+        rigidBody.velocity = Vector3.zero;
         MiniJump();
         Debug.Log("death");
         /* TODO respienie monet nie dziala bo find nie znajduje nieaktywnych obiektow
@@ -155,6 +158,10 @@ public class FoxController : MonoBehaviour
         else if (other.CompareTag("Finish"))
         {
             Debug.Log("Level completed! Score: " + score);
+        } 
+        else if (other.CompareTag("Danger"))
+        {
+            Die();
         }
 
     }
