@@ -64,11 +64,6 @@ public class FoxController : MonoBehaviour
             Jump();
         }
 
-        if (transform.position.y < -5)
-        {
-            Die();
-        }
-
         /*
         Debug.DrawRay(transform.position, rayLength * Vector3.down, Color.white, 1, false);
         Debug.DrawRay(transform.position - new Vector3(0.3f, 0, 0), rayLength * Vector3.down, Color.white, 1, false);
@@ -97,6 +92,7 @@ public class FoxController : MonoBehaviour
     {
         if (isGrounded())
         {
+            rigidBody.velocity = Vector3.zero;
             rigidBody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             Debug.Log("jumping");
         }
