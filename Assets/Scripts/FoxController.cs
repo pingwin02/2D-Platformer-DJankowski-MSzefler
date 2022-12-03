@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
 
 public class FoxController : MonoBehaviour
 {
@@ -28,6 +30,12 @@ public class FoxController : MonoBehaviour
 
     int score = 0;
 
+    int lives = 3;
+
+    int keysFound = 0;
+
+    const int keysNumber = 3;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -38,10 +46,7 @@ public class FoxController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!active)
-        {
-            return;
-        }
+        if (!active) return;
 
         isWalking = false;
 
@@ -94,13 +99,12 @@ public class FoxController : MonoBehaviour
         {
             rigidBody.velocity = Vector3.zero;
             rigidBody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-            Debug.Log("jumping");
         }
     }
 
     private void MiniJump()
     {
-        rigidBody.velocity = new Vector2(rigidBody.velocity.x, jumpForce / 2);
+        rigidBody.velocity = new Vector3(rigidBody.velocity.x, jumpForce / 2);
     }
 
     public void Die()
@@ -110,7 +114,7 @@ public class FoxController : MonoBehaviour
         _collider.enabled = false;
         rigidBody.velocity = Vector3.zero;
         MiniJump();
-        Debug.Log("death");
+        Debug.Log("Lives remaining: " + --lives);
         /* TODO respienie monet nie dziala bo find nie znajduje nieaktywnych obiektow
         GameObject[] coins = GameObject.FindGameObjectsWithTag("Bonus");
         foreach (GameObject coin in coins)
@@ -119,6 +123,17 @@ public class FoxController : MonoBehaviour
             Debug.Log(coin);
         }
         */
+        if (lives == 0)
+        {
+            Debug.Log("GAME OVER!!!");
+            /*
+            #if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+            #else
+                Application.Quit();
+            #endif
+            */
+        }
         StartCoroutine(RespawnPlayer());
     }
 
@@ -153,11 +168,38 @@ public class FoxController : MonoBehaviour
         }
         else if (other.CompareTag("Finish"))
         {
+            if (keysFound == 3)
             Debug.Log("Level completed! Score: " + score);
+            else
+            Debug.Log("Find all keys! Remaining: " + (keysNumber - keysFound));
         } 
+        else if (other.CompareTag("Enemy"))
+        {
+
+            if (transform.position.y > other.gameObject.transform.position.y + 1.15f)
+            {
+                MiniJump();
+                Debug.Log("Killed an enemy! Score: " + ++score);
+            }
+            else
+            {
+                Die();
+            }
+        }
         else if (other.CompareTag("Danger"))
         {
-            Die();
+             Die();
+        } 
+        else if (other.CompareTag("Key"))
+        {
+            Debug.Log("Keys found: " + ++keysFound);
+            other.gameObject.SetActive(false);
+        }
+        else if (other.CompareTag("Heart"))
+        {
+            lives += 2;
+            Debug.Log("Heart found. Lives left: " + lives);
+            other.gameObject.SetActive(false);
         }
 
     }
