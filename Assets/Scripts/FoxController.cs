@@ -36,6 +36,8 @@ public class FoxController : MonoBehaviour
 
     const int keysNumber = 3;
 
+    private bool doubleJumped = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -69,6 +71,12 @@ public class FoxController : MonoBehaviour
             Jump();
         }
 
+        if (!isGrounded() && (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) && !doubleJumped)
+        {
+            // Double jump
+            DoubleJump();
+        }
+
         /*
         Debug.DrawRay(transform.position, rayLength * Vector3.down, Color.white, 1, false);
         Debug.DrawRay(transform.position - new Vector3(0.3f, 0, 0), rayLength * Vector3.down, Color.white, 1, false);
@@ -78,6 +86,10 @@ public class FoxController : MonoBehaviour
         animator.SetBool("isWalking", isWalking);
         animator.SetBool("isGrounded", isGrounded());
         animator.SetBool("isDead", false);
+        if (isGrounded())
+        {
+            animator.SetBool("didKill", false);
+        }
     }
     void Awake()
     {
@@ -97,9 +109,21 @@ public class FoxController : MonoBehaviour
     {
         if (isGrounded())
         {
-            rigidBody.velocity = Vector3.zero;
-            rigidBody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            //rigidBody.velocity = Vector3.zero;
+            rigidBody.velocity = new Vector2(rigidBody.velocity.x, jumpForce);
+            //rigidBody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            doubleJumped = false;
         }
+    }
+
+    void DoubleJump()
+    {
+        // Apply a force upwards to the player
+        //rigidBody.AddForce(Vector2.up * jumpForce/2, ForceMode2D.Impulse);
+        rigidBody.velocity = new Vector2(rigidBody.velocity.x, jumpForce);
+
+        // Set the doubleJumped flag to true
+        doubleJumped = true;
     }
 
     private void MiniJump()
@@ -178,6 +202,7 @@ public class FoxController : MonoBehaviour
 
             if (transform.position.y > other.gameObject.transform.position.y + 1.15f)
             {
+                animator.SetBool("didKill", true);
                 MiniJump();
                 Debug.Log("Killed an enemy! Score: " + ++score);
             }
