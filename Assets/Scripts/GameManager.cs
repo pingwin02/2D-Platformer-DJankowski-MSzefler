@@ -60,8 +60,11 @@ public class GameManager : MonoBehaviour
                 Time.timeScale = 0f;
             }
         }
-        timer += Time.deltaTime;
-        timeText.text = FormatTime(timer);
+        if (currentGameState == GameState.GS_GAME)
+        {
+            timer += Time.deltaTime;
+            timeText.text = FormatTime(timer);
+        }
     }
 
     private void Awake()
@@ -98,23 +101,24 @@ public class GameManager : MonoBehaviour
         SetGameState(GameState.GS_GAME);
     }
 
-    public void LevelCompleted()
+    public bool LevelCompleted()
     {
         if (keysNumber == keysFound)
         {
             SetGameState(GameState.GS_LEVELCOMPLETED);
             Debug.Log("LEVEL COMPLETED!");
-            Time.timeScale = 0f;
+            return true;
         }
         else
             Debug.Log("Find all keys! Remaining: " + (keysNumber - keysFound));
+
+        return false;
     }
 
     public void GameOver()
     {
         SetGameState(GameState.GS_GAME_OVER);
         Debug.Log("GAME OVER!");
-        Time.timeScale = 0f;
     }
 
     public void AddPoints(int points)

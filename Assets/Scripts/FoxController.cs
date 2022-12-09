@@ -132,23 +132,7 @@ public class FoxController : MonoBehaviour
         MiniJump();
         GameManager.instance.AddHealth(-1);
 
-        /* TODO respienie monet nie dziala bo find nie znajduje nieaktywnych obiektow
-        GameObject[] coins = GameObject.FindGameObjectsWithTag("Bonus");
-        foreach (GameObject coin in coins)
-        {
-            coin.SetActive(true);
-            Debug.Log(coin);
-        }
-        if (lives == 0)
-        {
-            Debug.Log("GAME OVER!!!");
-            #if UNITY_EDITOR
-                UnityEditor.EditorApplication.isPlaying = false;
-            #else
-                Application.Quit();
-            #endif
-            
-        }*/
+        if (GameManager.instance.currentGameState == GameState.GS_GAME)
         StartCoroutine(RespawnPlayer());
     }
 
@@ -159,6 +143,21 @@ public class FoxController : MonoBehaviour
         active = true;
         _collider.enabled = true;
         MiniJump();
+    }
+    private IEnumerator WinAnimation()
+    {
+        for (int i = 0; i < 2; i++)
+        {
+            yield return new WaitForSeconds(0.5f);
+            MiniJump();
+        }
+        yield return new WaitForSeconds(1.0f);
+        for (int i = 0; i < 2; i++)
+        {
+            yield return new WaitForSeconds(0.5f);
+            MiniJump();
+        }
+
     }
 
     public void SetStartingPosition()
@@ -183,7 +182,12 @@ public class FoxController : MonoBehaviour
         }
         else if (other.CompareTag("Finish"))
         {
-            GameManager.instance.LevelCompleted();
+            if (GameManager.instance.LevelCompleted())
+            {
+                StartCoroutine(WinAnimation());
+                other.GetComponent<BoxCollider2D>().enabled = false;
+                animator.SetBool("didKill", true);
+            }
         }
         else if (other.CompareTag("Enemy"))
         {
