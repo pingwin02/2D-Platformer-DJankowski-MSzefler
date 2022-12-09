@@ -94,7 +94,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.8771335, y: 0.31331396}
   m_EdgeRadius: 0
---- !u!114 &1420575481
+--- !u!114 &3224233849126338235
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -106,5 +106,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f135c205099f0b24d853d9f9090677b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 1
-  moveRange: 2
+  moveSpeed: 0.1
+  moveRange: 1

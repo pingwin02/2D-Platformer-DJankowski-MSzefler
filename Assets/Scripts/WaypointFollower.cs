@@ -22,6 +22,8 @@ public class WaypointFollower : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (GameManager.instance.currentGameState != GameState.GS_GAME) return;
+
         float currentDistance = Vector2.Distance(transform.position, waypoints[currentWaypoint].transform.position);
         if (currentDistance < moveRange)
         {

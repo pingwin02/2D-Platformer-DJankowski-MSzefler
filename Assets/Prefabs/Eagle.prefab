@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5499617452969812205}
   - component: {fileID: -5962382838177005216}
   - component: {fileID: -3334644683938121530}
+  - component: {fileID: -1236222923934173514}
   - component: {fileID: -3621102885857405834}
   m_Layer: 0
   m_Name: Eagle
@@ -123,6 +124,27 @@ CapsuleCollider2D:
   m_Offset: {x: -0.112561226, y: 0.035814762}
   m_Size: {x: 2.3373775, y: 2.4908705}
   m_Direction: 0
+--- !u!50 &-1236222923934173514
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7667440257369749070}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 1
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 1
+  m_Constraints: 0
 --- !u!114 &-3621102885857405834
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -137,3 +159,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 1
   moveRange: 1
+  isMoving: 1

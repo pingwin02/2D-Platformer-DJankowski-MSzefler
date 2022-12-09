@@ -28,14 +28,6 @@ public class FoxController : MonoBehaviour
 
     private bool isFacingRight = true;
 
-    int score = 0;
-
-    int lives = 3;
-
-    int keysFound = 0;
-
-    const int keysNumber = 3;
-
     private bool doubleJumped = false;
 
     // Start is called before the first frame update
@@ -138,7 +130,8 @@ public class FoxController : MonoBehaviour
         _collider.enabled = false;
         rigidBody.velocity = Vector3.zero;
         MiniJump();
-        Debug.Log("Lives remaining: " + --lives);
+        GameManager.instance.AddHealth(-1);
+
         /* TODO respienie monet nie dziala bo find nie znajduje nieaktywnych obiektow
         GameObject[] coins = GameObject.FindGameObjectsWithTag("Bonus");
         foreach (GameObject coin in coins)
@@ -146,18 +139,16 @@ public class FoxController : MonoBehaviour
             coin.SetActive(true);
             Debug.Log(coin);
         }
-        */
         if (lives == 0)
         {
             Debug.Log("GAME OVER!!!");
-            /*
             #if UNITY_EDITOR
                 UnityEditor.EditorApplication.isPlaying = false;
             #else
                 Application.Quit();
             #endif
-            */
-        }
+            
+        }*/
         StartCoroutine(RespawnPlayer());
     }
 
@@ -187,24 +178,20 @@ public class FoxController : MonoBehaviour
     {
         if (other.CompareTag("Bonus"))
         {
-            Debug.Log("Score: " + ++score);
+            GameManager.instance.AddPoints(1);
             other.gameObject.SetActive(false);
         }
         else if (other.CompareTag("Finish"))
         {
-            if (keysFound == 3)
-                Debug.Log("Level completed! Score: " + score);
-            else
-                Debug.Log("Find all keys! Remaining: " + (keysNumber - keysFound));
+            GameManager.instance.LevelCompleted();
         }
         else if (other.CompareTag("Enemy"))
         {
-
             if (transform.position.y > other.gameObject.transform.position.y + 1.15f)
             {
                 animator.SetBool("didKill", true);
                 MiniJump();
-                Debug.Log("Killed an enemy! Score: " + ++score);
+                GameManager.instance.AddKilledEnemy();
             }
             else
             {
@@ -217,13 +204,14 @@ public class FoxController : MonoBehaviour
         }
         else if (other.CompareTag("Key"))
         {
-            Debug.Log("Keys found: " + ++keysFound);
+            Color color = other.GetComponent<SpriteRenderer>().color;
+
+            GameManager.instance.AddKeys(color);
             other.gameObject.SetActive(false);
         }
         else if (other.CompareTag("Heart"))
         {
-            lives += 2;
-            Debug.Log("Heart found. Lives left: " + lives);
+            GameManager.instance.AddHealth(2);
             other.gameObject.SetActive(false);
         }
         else if (other.CompareTag("MovingPlatform"))

@@ -32,7 +32,7 @@ public class EnemyController : MonoBehaviour
     {
         animator.SetBool("isMoving", isMoving);
 
-        if (!isMoving) return;
+        if (!isMoving || GameManager.instance.currentGameState != GameState.GS_GAME) return;
 
         if (isMovingRight)
         {
@@ -98,7 +98,19 @@ public class EnemyController : MonoBehaviour
                 StartCoroutine(KillOnAnimationEnd());
             }
         }
+        else if (other.CompareTag("MovingPlatform"))
+        {
+            transform.SetParent(other.transform);
+        }
 
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("MovingPlatform"))
+        {
+            transform.SetParent(null);
+        }
     }
 
     private IEnumerator KillOnAnimationEnd()

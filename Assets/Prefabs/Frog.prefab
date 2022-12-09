@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8097133847533618875}
   - component: {fileID: 1634422318932671354}
   - component: {fileID: -5101667772887655234}
+  - component: {fileID: 4136439041240368013}
   - component: {fileID: -1611988872615332091}
   - component: {fileID: -6509450025742912047}
   m_Layer: 0
@@ -33,7 +34,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1634422318932671354
 SpriteRenderer:
@@ -100,9 +101,30 @@ CapsuleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.05, y: -0.09}
-  m_Size: {x: 1.7, y: 1.2}
+  m_Offset: {x: -0.08094146, y: -0.11159611}
+  m_Size: {x: 1.7406726, y: 1.2447456}
   m_Direction: 1
+--- !u!50 &4136439041240368013
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2511216426483682315}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 1
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 1
+  m_Constraints: 0
 --- !u!95 &-1611988872615332091
 Animator:
   serializedVersion: 4
