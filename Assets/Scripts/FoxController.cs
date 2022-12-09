@@ -30,6 +30,8 @@ public class FoxController : MonoBehaviour
 
     private bool doubleJumped = false;
 
+    private bool immortalMode = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -43,6 +45,11 @@ public class FoxController : MonoBehaviour
         if (!active || GameManager.instance.currentGameState != GameState.GS_GAME) return;
 
         isWalking = false;
+
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            immortalMode = !immortalMode;
+        }
 
         if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
         {
@@ -125,15 +132,18 @@ public class FoxController : MonoBehaviour
 
     public void Die()
     {
-        active = false;
-        animator.SetBool("isDead", true);
-        _collider.enabled = false;
-        rigidBody.velocity = Vector3.zero;
-        MiniJump();
-        GameManager.instance.AddHealth(-1);
+        if (!immortalMode)
+        {
+            active = false;
+            animator.SetBool("isDead", true);
+            _collider.enabled = false;
+            rigidBody.velocity = Vector3.zero;
+            MiniJump();
+            GameManager.instance.AddHealth(-1);
 
-        if (GameManager.instance.currentGameState == GameState.GS_GAME)
-        StartCoroutine(RespawnPlayer());
+            if (GameManager.instance.currentGameState == GameState.GS_GAME)
+                StartCoroutine(RespawnPlayer());
+        }
     }
 
     private IEnumerator RespawnPlayer()
