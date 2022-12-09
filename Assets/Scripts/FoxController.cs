@@ -48,7 +48,7 @@ public class FoxController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!active) return;
+        if (!active || GameManager.instance.currentGameState != GameState.GS_GAME) return;
 
         isWalking = false;
 
@@ -193,10 +193,10 @@ public class FoxController : MonoBehaviour
         else if (other.CompareTag("Finish"))
         {
             if (keysFound == 3)
-            Debug.Log("Level completed! Score: " + score);
+                Debug.Log("Level completed! Score: " + score);
             else
-            Debug.Log("Find all keys! Remaining: " + (keysNumber - keysFound));
-        } 
+                Debug.Log("Find all keys! Remaining: " + (keysNumber - keysFound));
+        }
         else if (other.CompareTag("Enemy"))
         {
 
@@ -213,8 +213,8 @@ public class FoxController : MonoBehaviour
         }
         else if (other.CompareTag("Danger"))
         {
-             Die();
-        } 
+            Die();
+        }
         else if (other.CompareTag("Key"))
         {
             Debug.Log("Keys found: " + ++keysFound);
@@ -226,6 +226,17 @@ public class FoxController : MonoBehaviour
             Debug.Log("Heart found. Lives left: " + lives);
             other.gameObject.SetActive(false);
         }
+        else if (other.CompareTag("MovingPlatform"))
+        {
+            transform.SetParent(other.transform);
+        }
+    }
 
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("MovingPlatform"))
+        {
+            transform.SetParent(null);
+        }
     }
 }
