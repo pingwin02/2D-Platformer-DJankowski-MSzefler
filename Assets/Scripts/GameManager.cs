@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Security.Cryptography;
+using UnityEngine.SceneManagement;
 
 
 public enum GameState { GS_PAUSEMENU, GS_GAME, GS_LEVELCOMPLETED, GS_GAME_OVER }
@@ -38,6 +39,16 @@ public class GameManager : MonoBehaviour
 
     private float timer = 0;
 
+    public Canvas pauseMenuCanvas;
+
+    public Canvas levelCompletedCanvas;
+
+    const string keyHighScore = "HighScoreLevel1";
+
+    public TMP_Text ScoreText;
+
+    public TMP_Text HighScoreText;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -52,12 +63,10 @@ public class GameManager : MonoBehaviour
             if(currentGameState == GameState.GS_PAUSEMENU)
             {
                 InGame();
-                Time.timeScale = 1f;
             }
-            else
+            else if (currentGameState == GameState.GS_GAME)
             {
                 PauseMenu();
-                Time.timeScale = 0f;
             }
         }
         if (currentGameState == GameState.GS_GAME)
@@ -71,14 +80,34 @@ public class GameManager : MonoBehaviour
     {
         instance = this;
 
+        InGame();
+
         foreach (Image key in keysTab)
         {
             key.color = Color.black;
         }
 
         healthText.text = health.ToString();
-        Time.timeScale = 0f;
+        if (!PlayerPrefs.HasKey(keyHighScore))
+        {
+            PlayerPrefs.SetInt(keyHighScore, 0);
+        }
 
+    }
+
+    public void OnResumeButtonClicked()
+    {
+        InGame();
+    }
+
+    public void OnRestartButtonClicked()
+    {
+        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name);
+    }
+
+    public void OnReturntoMainMenuButtonClicked()
+    {
+        SceneManager.LoadSceneAsync("MainMenu");
     }
 
     void SetGameState(GameState newGameState)
@@ -88,25 +117,44 @@ public class GameManager : MonoBehaviour
         {
             inGameCanvas.enabled = true;
         }
+        if (currentGameState == GameState.GS_LEVELCOMPLETED)
+        {
+            Scene currentScene = SceneManager.GetActiveScene();
+            if (currentScene.name == "Level1")
+            {
+                int highScore = PlayerPrefs.GetInt(keyHighScore);
+                if (highScore < score)
+                {
+                    PlayerPrefs.SetInt(keyHighScore, score);
+                }
+            }
+        }
+        pauseMenuCanvas.enabled = (currentGameState == GameState.GS_PAUSEMENU);
+        levelCompletedCanvas.enabled = (currentGameState == GameState.GS_LEVELCOMPLETED);
     }
 
     public void PauseMenu()
     {
         SetGameState(GameState.GS_PAUSEMENU);
-        Debug.Log("PAUSE!");
+        Time.timeScale = 0f;
     }
 
     public void InGame()
     {
         SetGameState(GameState.GS_GAME);
+        Time.timeScale = 1f;
     }
 
     public bool LevelCompleted()
     {
-        if (keysNumber == keysFound)
+        if (keysFound == keysNumber)
         {
+            score += health;
+            score += enemyCount;
             SetGameState(GameState.GS_LEVELCOMPLETED);
-            Debug.Log("LEVEL COMPLETED!");
+            ScoreText.text = "Your score = " + score;
+            HighScoreText.text = "Your best score = " + PlayerPrefs.GetInt(keyHighScore);
+            Time.timeScale = 0f;
             return true;
         }
         else

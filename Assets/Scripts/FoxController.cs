@@ -192,12 +192,14 @@ public class FoxController : MonoBehaviour
         }
         else if (other.CompareTag("Finish"))
         {
-            if (GameManager.instance.LevelCompleted())
-            {
-                StartCoroutine(WinAnimation());
-                other.GetComponent<BoxCollider2D>().enabled = false;
-                animator.SetBool("didKill", true);
-            }
+            //if (GameManager.instance.LevelCompleted())
+            //{
+            //    StartCoroutine(WinAnimation());
+            //    other.GetComponent<BoxCollider2D>().enabled = false;
+            //    animator.SetBool("didKill", true);
+            //}
+
+            GameManager.instance.LevelCompleted();
         }
         else if (other.CompareTag("Enemy"))
         {
