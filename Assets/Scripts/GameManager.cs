@@ -145,7 +145,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
     }
 
-    public bool LevelCompleted()
+    public void LevelCompleted()
     {
         if (keysFound == keysNumber)
         {
@@ -155,12 +155,9 @@ public class GameManager : MonoBehaviour
             ScoreText.text = "Your score = " + score;
             HighScoreText.text = "Your best score = " + PlayerPrefs.GetInt(keyHighScore);
             Time.timeScale = 0f;
-            return true;
         }
         else
             Debug.Log("Find all keys! Remaining: " + (keysNumber - keysFound));
-
-        return false;
     }
 
     public void GameOver()
