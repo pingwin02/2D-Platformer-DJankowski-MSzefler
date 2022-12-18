@@ -150,7 +150,7 @@ public class FoxController : MonoBehaviour
         {
             active = false;
             animator.SetBool("isDead", true);
-            source.PlayOneShot(deathSound, 25 * AudioListener.volume);
+            source.PlayOneShot(deathSound, 25);
             _collider.enabled = false;
             rigidBody.velocity = Vector3.zero;
             MiniJump();
@@ -203,7 +203,7 @@ public class FoxController : MonoBehaviour
         if (other.CompareTag("Bonus"))
         {
             GameManager.instance.AddPoints(1);
-            source.PlayOneShot(bonusSound, 2* AudioListener.volume);
+            source.PlayOneShot(bonusSound, 2);
             other.gameObject.SetActive(false);
         }
         else if (other.CompareTag("Finish"))
@@ -224,7 +224,7 @@ public class FoxController : MonoBehaviour
                 animator.SetBool("didKill", true);
                 MiniJump();
                 GameManager.instance.AddKilledEnemy();
-                source.PlayOneShot(killSound, 25 * AudioListener.volume);
+                source.PlayOneShot(killSound, 25);
             }
             else
             {
@@ -240,13 +240,13 @@ public class FoxController : MonoBehaviour
             Color color = other.GetComponent<SpriteRenderer>().color;
 
             GameManager.instance.AddKeys(color);
-            source.PlayOneShot(bonusSound, 2 * AudioListener.volume);
+            source.PlayOneShot(bonusSound, 2);
             other.gameObject.SetActive(false);
         }
         else if (other.CompareTag("Heart"))
         {
             GameManager.instance.AddHealth(2);
-            source.PlayOneShot(heartSound, 2 * AudioListener.volume);
+            source.PlayOneShot(heartSound, 2);
             other.gameObject.SetActive(false);
         }
         else if (other.CompareTag("MovingPlatform"))
