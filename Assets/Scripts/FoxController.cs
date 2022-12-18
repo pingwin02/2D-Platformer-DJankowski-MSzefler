@@ -32,6 +32,16 @@ public class FoxController : MonoBehaviour
 
     private bool immortalMode = false;
 
+    [SerializeField] AudioClip bonusSound;
+
+    [SerializeField] AudioClip deathSound;
+
+    [SerializeField] AudioClip killSound;
+
+    [SerializeField] AudioClip heartSound;
+
+    private AudioSource source;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -53,6 +63,7 @@ public class FoxController : MonoBehaviour
 
         if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
         {
+            rigidBody.velocity *= new Vector2(0, 1);
             transform.Translate(moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
             isWalking = true;
 
@@ -60,12 +71,13 @@ public class FoxController : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
         {
+            rigidBody.velocity *= new Vector2(0, 1);
             transform.Translate(-moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
             isWalking = true;
 
             if (isFacingRight) Flip();
         }
-        if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             Jump();
         }
@@ -95,6 +107,8 @@ public class FoxController : MonoBehaviour
         rigidBody = GetComponent<Rigidbody2D>();
 
         animator = GetComponent<Animator>();
+
+        source = GetComponent<AudioSource>();
     }
 
     bool isGrounded()
@@ -136,6 +150,7 @@ public class FoxController : MonoBehaviour
         {
             active = false;
             animator.SetBool("isDead", true);
+            source.PlayOneShot(deathSound, 25 * AudioListener.volume);
             _collider.enabled = false;
             rigidBody.velocity = Vector3.zero;
             MiniJump();
@@ -188,6 +203,7 @@ public class FoxController : MonoBehaviour
         if (other.CompareTag("Bonus"))
         {
             GameManager.instance.AddPoints(1);
+            source.PlayOneShot(bonusSound, 2* AudioListener.volume);
             other.gameObject.SetActive(false);
         }
         else if (other.CompareTag("Finish"))
@@ -208,6 +224,7 @@ public class FoxController : MonoBehaviour
                 animator.SetBool("didKill", true);
                 MiniJump();
                 GameManager.instance.AddKilledEnemy();
+                source.PlayOneShot(killSound, 25 * AudioListener.volume);
             }
             else
             {
@@ -223,11 +240,13 @@ public class FoxController : MonoBehaviour
             Color color = other.GetComponent<SpriteRenderer>().color;
 
             GameManager.instance.AddKeys(color);
+            source.PlayOneShot(bonusSound, 2 * AudioListener.volume);
             other.gameObject.SetActive(false);
         }
         else if (other.CompareTag("Heart"))
         {
             GameManager.instance.AddHealth(2);
+            source.PlayOneShot(heartSound, 2 * AudioListener.volume);
             other.gameObject.SetActive(false);
         }
         else if (other.CompareTag("MovingPlatform"))

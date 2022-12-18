@@ -7,7 +7,7 @@ using System.Security.Cryptography;
 using UnityEngine.SceneManagement;
 
 
-public enum GameState { GS_PAUSEMENU, GS_GAME, GS_LEVELCOMPLETED, GS_GAME_OVER }
+public enum GameState { GS_PAUSEMENU, GS_GAME, GS_LEVELCOMPLETED, GS_GAME_OVER, GS_OPTIONS }
 
 public class GameManager : MonoBehaviour
 {
@@ -48,6 +48,14 @@ public class GameManager : MonoBehaviour
     public TMP_Text ScoreText;
 
     public TMP_Text HighScoreText;
+
+    public Canvas optionsCanvas;
+
+    public TMP_Text volumeText;
+
+    public TMP_Text qualityText;
+
+    public Canvas gameoverCanvas;
 
     // Start is called before the first frame update
     void Start()
@@ -131,12 +139,38 @@ public class GameManager : MonoBehaviour
         }
         pauseMenuCanvas.enabled = (currentGameState == GameState.GS_PAUSEMENU);
         levelCompletedCanvas.enabled = (currentGameState == GameState.GS_LEVELCOMPLETED);
+        optionsCanvas.enabled = (currentGameState == GameState.GS_OPTIONS);
+        gameoverCanvas.enabled = (currentGameState == GameState.GS_GAME_OVER);
     }
 
     public void PauseMenu()
     {
         SetGameState(GameState.GS_PAUSEMENU);
         Time.timeScale = 0f;
+    }
+
+    public void Options()
+    {
+        SetGameState(GameState.GS_OPTIONS);
+        Time.timeScale = 0f;
+    }
+
+    public void QualityUp()
+    {
+        QualitySettings.IncreaseLevel();
+        qualityText.text = "Quality: " + QualitySettings.names[QualitySettings.GetQualityLevel()];
+    }
+
+    public void QualityDown()
+    {
+        QualitySettings.DecreaseLevel();
+        qualityText.text = "Quality: " + QualitySettings.names[QualitySettings.GetQualityLevel()];
+    }
+
+    public void SetVolume(Slider vol)
+    {
+        AudioListener.volume = vol.value / 100;
+        volumeText.text = "Master volume: " + vol.value + " %";
     }
 
     public void InGame()
@@ -152,8 +186,8 @@ public class GameManager : MonoBehaviour
             score += health;
             score += enemyCount;
             SetGameState(GameState.GS_LEVELCOMPLETED);
-            ScoreText.text = "Your score = " + score;
-            HighScoreText.text = "Your best score = " + PlayerPrefs.GetInt(keyHighScore);
+            ScoreText.text = "Your score: " + score;
+            HighScoreText.text = "Your best score: " + PlayerPrefs.GetInt(keyHighScore);
             Time.timeScale = 0f;
         }
         else
@@ -163,7 +197,6 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         SetGameState(GameState.GS_GAME_OVER);
-        Debug.Log("GAME OVER!");
     }
 
     public void AddPoints(int points)
