@@ -253,6 +253,10 @@ public class FoxController : MonoBehaviour
         {
             transform.SetParent(other.transform);
         }
+        else if (other.CompareTag("Crusher"))
+        {
+            Die();
+        }
     }
 
     private void OnTriggerExit2D(Collider2D other)
