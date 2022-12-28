@@ -7,7 +7,7 @@ using System.Security.Cryptography;
 using UnityEngine.SceneManagement;
 
 
-public enum GameState { GS_PAUSEMENU, GS_GAME, GS_LEVELCOMPLETED, GS_GAME_OVER, GS_OPTIONS }
+public enum GameState { GS_PAUSEMENU, GS_GAME, GS_LEVELCOMPLETED, GS_GAME_OVER, GS_OPTIONS, GS_DIALOGUE }
 
 public class GameManager : MonoBehaviour
 {
@@ -57,6 +57,18 @@ public class GameManager : MonoBehaviour
 
     public Canvas gameoverCanvas;
 
+    // Dialogue variables
+
+    public Canvas dialogueCanvas;
+
+    public TextMeshProUGUI dialogueText;
+
+    public string[] dialogueLines;
+
+    public float dialogueTextSpeed;
+
+    private int dialogueIndex;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -81,6 +93,19 @@ public class GameManager : MonoBehaviour
         {
             timer += Time.deltaTime;
             timeText.text = FormatTime(timer);
+        }
+
+        if (Input.GetMouseButtonDown(0) && currentGameState == GameState.GS_DIALOGUE)
+        {
+            if (dialogueText.text == dialogueLines[dialogueIndex])
+            {
+                NextLine();
+            }
+            else
+            {
+                StopAllCoroutines();
+                dialogueText.text = dialogueLines[dialogueIndex];
+            }
         }
     }
 
@@ -141,6 +166,7 @@ public class GameManager : MonoBehaviour
         levelCompletedCanvas.enabled = (currentGameState == GameState.GS_LEVELCOMPLETED);
         optionsCanvas.enabled = (currentGameState == GameState.GS_OPTIONS);
         gameoverCanvas.enabled = (currentGameState == GameState.GS_GAME_OVER);
+        dialogueCanvas.enabled = (currentGameState == GameState.GS_DIALOGUE);
     }
 
     public void PauseMenu()
@@ -179,6 +205,11 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
     }
 
+    public void Dialogue()
+    {
+        SetGameState(GameState.GS_DIALOGUE);
+    }
+
     public void LevelCompleted()
     {
         if (keysFound == keysNumber)
@@ -191,7 +222,12 @@ public class GameManager : MonoBehaviour
             Time.timeScale = 0f;
         }
         else
-            Debug.Log("Find all keys! Remaining: " + (keysNumber - keysFound));
+        {
+            dialogueLines[1] = " Find all keys! Remaining: " + (keysNumber - keysFound);
+            StartDialogue();
+            Dialogue();
+            //Debug.Log("Find all keys! Remaining: " + (keysNumber - keysFound));
+        }
     }
 
     public void GameOver()
@@ -233,5 +269,38 @@ public class GameManager : MonoBehaviour
         int seconds = (int)time % 60;
 
         return string.Format("{0:00}:{1:00}", minutes, seconds);
+    }
+
+    void StartDialogue()
+    {
+        if (currentGameState != GameState.GS_DIALOGUE)
+        {
+            dialogueIndex = 0;
+            StartCoroutine(TypeLine());
+        }
+    }
+
+    IEnumerator TypeLine()
+    {
+        // Type each character one by one
+        foreach (char c in dialogueLines[dialogueIndex].ToCharArray())
+        {
+            dialogueText.text += c;
+            yield return new WaitForSeconds(dialogueTextSpeed);
+        }
+    }
+
+    void NextLine()
+    {
+        if (dialogueIndex < dialogueLines.Length - 1)
+        {
+            dialogueIndex++;
+            StartCoroutine(TypeLine());
+        }
+        else
+        {
+            InGame();         
+        }
+        dialogueText.text = string.Empty;
     }
 }
