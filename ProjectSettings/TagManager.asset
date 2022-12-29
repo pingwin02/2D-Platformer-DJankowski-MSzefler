@@ -10,6 +10,7 @@ TagManager:
   - Bonus
   - Heart
   - MovingPlatform
+  - Crusher
   layers:
   - Default
   - TransparentFX
@@ -44,6 +45,12 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Back
+    uniqueID: 423123229
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Fore
+    uniqueID: 1003754485
     locked: 0

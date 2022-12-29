@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
 
     private int keysFound = 0;
 
-    private int keysNumber = 3;
+    private const int keysNumber = 3;
 
     public TMP_Text healthText;
 
@@ -95,7 +95,7 @@ public class GameManager : MonoBehaviour
             timeText.text = FormatTime(timer);
         }
 
-        if (Input.GetMouseButtonDown(0) && currentGameState == GameState.GS_DIALOGUE)
+        if (Input.GetKeyDown(KeyCode.Space) && currentGameState == GameState.GS_DIALOGUE)
         {
             if (dialogueText.text == dialogueLines[dialogueIndex])
             {
@@ -125,6 +125,8 @@ public class GameManager : MonoBehaviour
         {
             PlayerPrefs.SetInt(keyHighScore, 0);
         }
+
+        AudioListener.volume = 0.05f;
 
     }
 
@@ -216,14 +218,35 @@ public class GameManager : MonoBehaviour
         {
             score += health;
             score += enemyCount;
+            int beforeBonus = score;
+            ScoreText.text = "Your score:\n" + beforeBonus;
+            if (40 < timer && timer < 60)
+            {
+                score += 10;
+                ScoreText.text += " + 10 (<60s)";
+            }
+            else if (30 < timer && timer < 40)
+            {
+                score += 20;
+                ScoreText.text += " + 20 (<40s)";
+            }
+            else if (timer < 30)
+            {
+                score += 30;
+                ScoreText.text += " + 30 (<30s)";
+            }
+            else
+            {
+                ScoreText.text += " + 0 (>60s)";
+            }
             SetGameState(GameState.GS_LEVELCOMPLETED);
-            ScoreText.text = "Your score: " + score;
+            ScoreText.text += " = " + score;
             HighScoreText.text = "Your best score: " + PlayerPrefs.GetInt(keyHighScore);
             Time.timeScale = 0f;
         }
         else
         {
-            dialogueLines[1] = " Find all keys! Remaining: " + (keysNumber - keysFound);
+            dialogueLines[1] = "Remaining: " + (keysNumber - keysFound);
             StartDialogue();
             Dialogue();
             //Debug.Log("Find all keys! Remaining: " + (keysNumber - keysFound));
@@ -282,6 +305,7 @@ public class GameManager : MonoBehaviour
 
     IEnumerator TypeLine()
     {
+        dialogueText.text = string.Empty;
         // Type each character one by one
         foreach (char c in dialogueLines[dialogueIndex].ToCharArray())
         {
@@ -301,6 +325,5 @@ public class GameManager : MonoBehaviour
         {
             InGame();         
         }
-        dialogueText.text = string.Empty;
     }
 }

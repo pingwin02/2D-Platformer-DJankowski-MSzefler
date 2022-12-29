@@ -52,40 +52,45 @@ public class FoxController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!active || GameManager.instance.currentGameState != GameState.GS_GAME) return;
+
+        if (!active) return;
 
         isWalking = false;
 
-        if (Input.GetKeyDown(KeyCode.G))
+        if (GameManager.instance.currentGameState == GameState.GS_GAME)
         {
-            immortalMode = !immortalMode;
-        }
 
-        if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
-        {
-            rigidBody.velocity *= new Vector2(0, 1);
-            transform.Translate(moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
-            isWalking = true;
+            if (Input.GetKeyDown(KeyCode.G))
+            {
+                immortalMode = !immortalMode;
+            }
 
-            if (!isFacingRight) Flip();
-        }
-        if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
-        {
-            rigidBody.velocity *= new Vector2(0, 1);
-            transform.Translate(-moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
-            isWalking = true;
+            if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
+            {
+                rigidBody.velocity *= new Vector2(0, 1);
+                transform.Translate(moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
+                isWalking = true;
 
-            if (isFacingRight) Flip();
-        }
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Jump();
-        }
+                if (!isFacingRight) Flip();
+            }
+            if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
+            {
+                rigidBody.velocity *= new Vector2(0, 1);
+                transform.Translate(-moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
+                isWalking = true;
 
-        if (!isGrounded() && (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) && !doubleJumped)
-        {
-            // Double jump
-            DoubleJump();
+                if (isFacingRight) Flip();
+            }
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                Jump();
+            }
+
+            if (!isGrounded() && (Input.GetKeyDown(KeyCode.Space)) && !doubleJumped)
+            {
+                // Double jump
+                DoubleJump();
+            }
         }
 
         /*
