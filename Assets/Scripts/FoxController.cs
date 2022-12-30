@@ -256,4 +256,10 @@ public class FoxController : MonoBehaviour
             transform.SetParent(null);
         }
     }
+
+    public bool GetAnimatorIsDead()
+    {
+        
+        return animator.GetBool("isDead");
+    }
 }
