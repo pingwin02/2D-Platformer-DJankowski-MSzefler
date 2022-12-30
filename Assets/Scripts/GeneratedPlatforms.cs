@@ -7,7 +7,7 @@ public class GeneratedPlatforms : MonoBehaviour
 
     [SerializeField] GameObject platformPrefab;
 
-    const int PLATFORMS_NUM = 10;
+    public int numberOfPlatforms = 10;
 
     GameObject[] platforms;
 
@@ -32,8 +32,8 @@ public class GeneratedPlatforms : MonoBehaviour
     {
         if (GameManager.instance.currentGameState != GameState.GS_GAME) return;
 
-        for (int i = 0; i < PLATFORMS_NUM; i++) {
-            currentPosition = (i + next) % PLATFORMS_NUM;
+        for (int i = 0; i <= numberOfPlatforms; i++) {
+            currentPosition = (i + next) % numberOfPlatforms;
             if (platforms[i].transform.position == positions[currentPosition]) next++;
             platforms[i].transform.position = Vector3.MoveTowards(platforms[i].transform.position, positions[currentPosition], speed * Time.deltaTime);
         }
@@ -41,13 +41,13 @@ public class GeneratedPlatforms : MonoBehaviour
 
     void Awake()
     {
-        platforms = new GameObject[PLATFORMS_NUM];
-        positions = new Vector3[PLATFORMS_NUM];
+        platforms = new GameObject[numberOfPlatforms + 1];
+        positions = new Vector3[numberOfPlatforms + 1];
 
-        for (int i = 0; i < PLATFORMS_NUM; i++)
+        for (int i = 0; i <= numberOfPlatforms; i++)
         {
-            positions[i] = new Vector3(radius * Mathf.Cos(2 * Mathf.PI*i/PLATFORMS_NUM) + this.transform.position.x, 
-                    radius * Mathf.Sin(2 * Mathf.PI * i / PLATFORMS_NUM) + this.transform.position.y, 
+            positions[i] = new Vector3(radius * Mathf.Cos(2 * Mathf.PI*i/numberOfPlatforms) + this.transform.position.x, 
+                    radius * Mathf.Sin(2 * Mathf.PI * i / numberOfPlatforms) + this.transform.position.y, 
                     this.transform.position.z);
 
             platforms[i] = Instantiate(platformPrefab, positions[i], Quaternion.identity);

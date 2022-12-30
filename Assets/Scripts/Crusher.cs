@@ -28,6 +28,8 @@ public class Crusher : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (GameManager.instance.currentGameState != GameState.GS_GAME) return;
+
         if (Time.time - startTime >= delayTime)
         {
             if (transform.position.y >= up.position.y)

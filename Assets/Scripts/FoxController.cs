@@ -81,30 +81,23 @@ public class FoxController : MonoBehaviour
 
                 if (isFacingRight) Flip();
             }
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKey(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Space))
             {
                 Jump();
             }
-
-            if (!isGrounded() && (Input.GetKeyDown(KeyCode.Space)) && !doubleJumped)
-            {
-                // Double jump
-                DoubleJump();
-            }
         }
-
         /*
         Debug.DrawRay(transform.position, rayLength * Vector3.down, Color.white, 1, false);
         Debug.DrawRay(transform.position - new Vector3(0.3f, 0, 0), rayLength * Vector3.down, Color.white, 1, false);
         Debug.DrawRay(transform.position + new Vector3(0.3f, 0, 0), rayLength * Vector3.down, Color.white, 1, false);
         */
-
         animator.SetBool("isWalking", isWalking);
         animator.SetBool("isGrounded", isGrounded());
         animator.SetBool("isDead", false);
         if (isGrounded())
         {
             animator.SetBool("didKill", false);
+            doubleJumped = false;
         }
     }
     void Awake()
@@ -127,17 +120,16 @@ public class FoxController : MonoBehaviour
     {
         if (isGrounded())
         {
-            //rigidBody.velocity = Vector3.zero;
             rigidBody.velocity = new Vector2(rigidBody.velocity.x, jumpForce);
-            //rigidBody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-            doubleJumped = false;
+        }
+        else if (!doubleJumped)
+        {
+            DoubleJump();
         }
     }
 
     void DoubleJump()
     {
-        // Apply a force upwards to the player
-        //rigidBody.AddForce(Vector2.up * jumpForce/2, ForceMode2D.Impulse);
         rigidBody.velocity = new Vector2(rigidBody.velocity.x, jumpForce);
 
         // Set the doubleJumped flag to true
@@ -213,13 +205,6 @@ public class FoxController : MonoBehaviour
         }
         else if (other.CompareTag("Finish"))
         {
-            //if (GameManager.instance.LevelCompleted())
-            //{
-            //    StartCoroutine(WinAnimation());
-            //    other.GetComponent<BoxCollider2D>().enabled = false;
-            //    animator.SetBool("didKill", true);
-            //}
-
             GameManager.instance.LevelCompleted();
         }
         else if (other.CompareTag("Enemy"))

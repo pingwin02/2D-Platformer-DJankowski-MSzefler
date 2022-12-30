@@ -13,9 +13,7 @@ public class EnemyController : MonoBehaviour
 
     private Animator animator;
 
-    private bool isFacingRight = false;
-
-    bool isMovingRight = false;
+    public bool isMovingRight = false;
 
     private Collider2D _collider;
 
@@ -69,7 +67,7 @@ public class EnemyController : MonoBehaviour
     }
     private void Flip()
     {
-        isFacingRight = !isFacingRight;
+
         isMovingRight = !isMovingRight;
         Vector3 theScale = transform.localScale;
         theScale.x *= -1;

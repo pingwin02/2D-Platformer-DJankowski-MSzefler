@@ -57,6 +57,8 @@ public class GameManager : MonoBehaviour
 
     public Canvas gameoverCanvas;
 
+    public Image fadeImage;
+
     // Dialogue variables
 
     public Canvas dialogueCanvas;
@@ -179,8 +181,11 @@ public class GameManager : MonoBehaviour
 
     public void Options()
     {
-        SetGameState(GameState.GS_OPTIONS);
-        Time.timeScale = 0f;
+        if (currentGameState == GameState.GS_GAME)
+        {
+            SetGameState(GameState.GS_OPTIONS);
+            Time.timeScale = 0f;
+        }
     }
 
     public void QualityUp()
@@ -256,6 +261,19 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         SetGameState(GameState.GS_GAME_OVER);
+        StartCoroutine(Fade());
+        AudioListener.volume = 0f;
+    }
+
+    private IEnumerator Fade()
+    {
+        for (float i = 0; i < 1; i += 0.01f)
+        {
+            fadeImage.color = new Color(fadeImage.color.r, fadeImage.color.g, fadeImage.color.b, i);
+            yield return new WaitForSeconds(0.02f);
+        }
+
+        fadeImage.color = new Color(fadeImage.color.r, fadeImage.color.g, fadeImage.color.b, 1);
     }
 
     public void AddPoints(int points)
