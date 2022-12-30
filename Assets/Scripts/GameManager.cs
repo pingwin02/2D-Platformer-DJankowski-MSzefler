@@ -225,24 +225,24 @@ public class GameManager : MonoBehaviour
             score += enemyCount;
             int beforeBonus = score;
             ScoreText.text = "Your score:\n" + beforeBonus;
-            if (40 < timer && timer < 60)
+            if (120 < timer && timer < 180)
             {
                 score += 10;
-                ScoreText.text += " + 10 (<60s)";
+                ScoreText.text += " + 10 (<180s)";
             }
-            else if (30 < timer && timer < 40)
+            else if (60 < timer && timer < 120)
             {
                 score += 20;
-                ScoreText.text += " + 20 (<40s)";
+                ScoreText.text += " + 20 (<120s)";
             }
-            else if (timer < 30)
+            else if (timer < 60)
             {
                 score += 30;
-                ScoreText.text += " + 30 (<30s)";
+                ScoreText.text += " + 30 (<60s)";
             }
             else
             {
-                ScoreText.text += " + 0 (>60s)";
+                ScoreText.text += " + 0 (>180s)";
             }
             SetGameState(GameState.GS_LEVELCOMPLETED);
             ScoreText.text += " = " + score;

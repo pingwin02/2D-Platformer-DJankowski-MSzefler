@@ -10,12 +10,12 @@ GameObject:
   m_Component:
   - component: {fileID: 2407973035778999571}
   - component: {fileID: 2407973035778999570}
-  - component: {fileID: 2407973035778999569}
   - component: {fileID: 2407973035778999580}
   - component: {fileID: 2407973035778999581}
+  - component: {fileID: -4973641271695806148}
   m_Layer: 0
   m_Name: DoorKey
-  m_TagString: Untagged
+  m_TagString: DoorKey
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -28,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2407973035778999568}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 31.297628, y: -9.414628, z: 0.0789475}
+  m_LocalPosition: {x: -22.26, y: -7.4, z: 0.0789475}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -87,26 +87,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!95 &2407973035778999569
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2407973035778999568}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: cc6a8601912e2e94f8e68cf1d13d2739, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!58 &2407973035778999580
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -117,7 +97,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -139,19 +119,7 @@ MonoBehaviour:
   _collisionEntered:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2407973035778999568}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 7362182493081955913, guid: c5c8eed8186e3114cb2a7f0947cb1b3b, type: 3}
         m_TargetAssemblyTypeName: Door, Assembly-CSharp
         m_MethodName: Open
         m_Mode: 1
@@ -162,7 +130,16 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
-  _collisionExit:
-    m_PersistentCalls:
-      m_Calls: []
+        m_CallState: 1
+--- !u!114 &-4973641271695806148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2407973035778999568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58cd6cec942dd4e4097a1b6eb24eebdd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

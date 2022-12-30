@@ -18,6 +18,8 @@ public class FoxController : MonoBehaviour
 
     private Collider2D _collider;
 
+    private SpriteRenderer _renderer;
+
     private bool active = true;
 
     private Vector3 startPosition;
@@ -46,6 +48,7 @@ public class FoxController : MonoBehaviour
     void Start()
     {
         _collider = GetComponent<Collider2D>();
+        _renderer = GetComponent<SpriteRenderer>();
         SetStartingPosition();
 
     }
@@ -243,6 +246,13 @@ public class FoxController : MonoBehaviour
         {
             transform.SetParent(other.transform);
         }
+        else if (other.CompareTag("DoorKey"))
+        {
+            source.PlayOneShot(bonusSound, 2);
+            StartCoroutine(showDoorOpening());
+            other.gameObject.SetActive(false);
+
+        }
         else if (other.CompareTag("Crusher"))
         {
             Die();
@@ -259,7 +269,20 @@ public class FoxController : MonoBehaviour
 
     public bool GetAnimatorIsDead()
     {
-        
         return animator.GetBool("isDead");
     }
+
+    private IEnumerator showDoorOpening()
+    {
+        _renderer.enabled = false;
+        active = false;
+        Vector3 currentPosition = this.transform.position;
+        Vector3 doorPosition = new Vector3(-29, 1.65f, 0);
+        this.transform.position = doorPosition;
+        yield return new WaitForSeconds(3f);
+        this.transform.position = currentPosition;
+        _renderer.enabled = true;
+        active = true;
+    }
+
 }
