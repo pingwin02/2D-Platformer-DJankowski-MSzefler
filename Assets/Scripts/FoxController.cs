@@ -332,7 +332,7 @@ public class FoxController : MonoBehaviour
         _renderer.enabled = false;
         active = false;
         Vector3 currentPosition = this.transform.position;
-        Vector3 doorPosition = new Vector3(-29, 1.65f, 0);
+        Vector3 doorPosition = new Vector3(-28.5f, 1.65f, 0);
         this.transform.position = doorPosition;
         yield return new WaitForSeconds(3f);
         this.transform.position = currentPosition;

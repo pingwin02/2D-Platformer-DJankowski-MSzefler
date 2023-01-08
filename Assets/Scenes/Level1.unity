@@ -100820,6 +100820,7 @@ MonoBehaviour:
   - Collect all keys to finish the level!
   - 
   dialogueTextSpeed: 0.05
+  DayLight: {fileID: 1275320303}
 --- !u!4 &992920869
 Transform:
   m_ObjectHideFlags: 0

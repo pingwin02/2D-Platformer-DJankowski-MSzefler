@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Security.Cryptography;
 using UnityEngine.SceneManagement;
-
+using UnityEngine.Rendering.Universal;
 
 public enum GameState { GS_PAUSEMENU, GS_GAME, GS_LEVELCOMPLETED, GS_GAME_OVER, GS_OPTIONS, GS_DIALOGUE }
 
@@ -77,6 +77,8 @@ public class GameManager : MonoBehaviour
 
     private int dialogueIndex;
 
+    public Light2D DayLight;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -135,6 +137,8 @@ public class GameManager : MonoBehaviour
         }
 
         AudioListener.volume = 0.05f;
+
+        DayLight.color = new Color(1f, 1f, 1f);
 
         StartCoroutine(SetTemperatureText());
     }
@@ -373,10 +377,12 @@ public class GameManager : MonoBehaviour
             if (temperature >= 30 && temperature < 45)
             {
                 temperatureText.color = new Color(0.9f, 0.7f, 0);
+                DayLight.color = new Color(0.75f, 0.75f, 0.5f);
             }
             else if (temperature >= 45 && temperature < 60)
             {
                 temperatureText.color = new Color(1, 0, 0);
+                DayLight.color = new Color(0.75f, 0.75f, 0f);
             }
             else if(temperature >= 60) 
             {    
