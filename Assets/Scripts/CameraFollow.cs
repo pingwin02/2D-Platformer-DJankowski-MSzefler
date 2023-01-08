@@ -39,6 +39,11 @@ namespace UnityStandardAssets._2D
 
         private void Update()
         {
+            if (GameManager.instance.currentGameState == GameState.GS_GAME_OVER)
+            {
+                transform.SetParent(null);
+                return;
+            }
             TrackPlayer();
         }
 

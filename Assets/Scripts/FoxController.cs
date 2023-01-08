@@ -16,6 +16,8 @@ public class FoxController : MonoBehaviour
 
     const float rayLength = 1.50f;
 
+    const float rayLength2 = 0.75f;
+
     private Collider2D _collider;
 
     private SpriteRenderer _renderer;
@@ -70,7 +72,8 @@ public class FoxController : MonoBehaviour
 
             if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
             {
-                rigidBody.velocity *= new Vector2(0, 1);
+                if (!isWall())
+                    rigidBody.velocity *= new Vector2(0, 1);
                 transform.Translate(moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
                 isWalking = true;
 
@@ -78,7 +81,8 @@ public class FoxController : MonoBehaviour
             }
             if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
             {
-                rigidBody.velocity *= new Vector2(0, 1);
+                if (!isWall())
+                    rigidBody.velocity *= new Vector2(0, 1);
                 transform.Translate(-moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
                 isWalking = true;
 
@@ -93,7 +97,10 @@ public class FoxController : MonoBehaviour
         Debug.DrawRay(transform.position, rayLength * Vector3.down, Color.white, 1, false);
         Debug.DrawRay(transform.position - new Vector3(0.3f, 0, 0), rayLength * Vector3.down, Color.white, 1, false);
         Debug.DrawRay(transform.position + new Vector3(0.3f, 0, 0), rayLength * Vector3.down, Color.white, 1, false);
+        Debug.DrawRay(transform.position, Vector2.right * rayLength2, Color.white, 1, false);
+        Debug.DrawRay(transform.position, Vector2.left * rayLength2, Color.white, 1, false);
         */
+
         animator.SetBool("isWalking", isWalking);
         animator.SetBool("isGrounded", isGrounded());
         animator.SetBool("isDead", false);
@@ -117,6 +124,12 @@ public class FoxController : MonoBehaviour
         return (Physics2D.Raycast(transform.position - new Vector3(0.3f, 0, 0), Vector2.down, rayLength, groundLayer.value) ||
             Physics2D.Raycast(transform.position + new Vector3(0.3f, 0, 0), Vector2.down, rayLength, groundLayer.value) ||
             Physics2D.Raycast(this.transform.position, Vector2.down, rayLength, groundLayer.value));
+    }
+
+    bool isWall()
+    {
+        return (Physics2D.Raycast(transform.position, Vector2.right, rayLength2, groundLayer.value) ||
+            Physics2D.Raycast(transform.position, Vector2.left, rayLength2, groundLayer.value));
     }
 
     void Jump()

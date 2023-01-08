@@ -57,7 +57,9 @@ public class GameManager : MonoBehaviour
 
     public Canvas gameoverCanvas;
 
-    public Image fadeImage;
+    public Image fadeImageLose;
+
+    public Image fadeImageWin;
 
     // Dialogue variables
 
@@ -245,9 +247,9 @@ public class GameManager : MonoBehaviour
                 ScoreText.text += " + 0 (>180s)";
             }
             SetGameState(GameState.GS_LEVELCOMPLETED);
+            StartCoroutine(FadeWin());
             ScoreText.text += " = " + score;
             HighScoreText.text = "Your best score: " + PlayerPrefs.GetInt(keyHighScore);
-            Time.timeScale = 0f;
         }
         else
         {
@@ -261,19 +263,30 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         SetGameState(GameState.GS_GAME_OVER);
-        StartCoroutine(Fade());
+        StartCoroutine(FadeLose());
         AudioListener.volume = 0f;
     }
 
-    private IEnumerator Fade()
+    private IEnumerator FadeLose()
     {
         for (float i = 0; i < 1; i += 0.01f)
         {
-            fadeImage.color = new Color(fadeImage.color.r, fadeImage.color.g, fadeImage.color.b, i);
+            fadeImageLose.color = new Color(fadeImageLose.color.r, fadeImageLose.color.g, fadeImageLose.color.b, i);
             yield return new WaitForSeconds(0.02f);
         }
 
-        fadeImage.color = new Color(fadeImage.color.r, fadeImage.color.g, fadeImage.color.b, 1);
+        fadeImageLose.color = new Color(fadeImageLose.color.r, fadeImageLose.color.g, fadeImageLose.color.b, 1);
+    }
+
+    private IEnumerator FadeWin()
+    {
+        for (float i = 0; i < 1; i += 0.01f)
+        {
+            fadeImageWin.color = new Color(fadeImageWin.color.r, fadeImageWin.color.g, fadeImageWin.color.b, i);
+            yield return new WaitForSeconds(0.02f);
+        }
+
+        fadeImageWin.color = new Color(fadeImageWin.color.r, fadeImageWin.color.g, fadeImageWin.color.b, 1);
     }
 
     public void AddPoints(int points)
