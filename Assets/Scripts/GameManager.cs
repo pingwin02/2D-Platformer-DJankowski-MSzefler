@@ -39,6 +39,10 @@ public class GameManager : MonoBehaviour
 
     private float timer = 0;
 
+    public TMP_Text temperatureText;
+
+    private int temperature = 20;
+
     public Canvas pauseMenuCanvas;
 
     public Canvas levelCompletedCanvas;
@@ -132,6 +136,7 @@ public class GameManager : MonoBehaviour
 
         AudioListener.volume = 0.05f;
 
+        StartCoroutine(SetTemperatureText());
     }
 
     public void OnResumeButtonClicked()
@@ -355,6 +360,29 @@ public class GameManager : MonoBehaviour
         else
         {
             InGame();         
+        }
+    }
+
+    IEnumerator SetTemperatureText()
+    {
+        while (currentGameState == GameState.GS_GAME)
+        {
+            yield return new WaitForSeconds(5.0f);
+            temperature++;
+            temperatureText.text = temperature + "°C";
+            if (temperature >= 30 && temperature < 45)
+            {
+                temperatureText.color = new Color(0.9f, 0.7f, 0);
+            }
+            else if (temperature >= 45 && temperature < 60)
+            {
+                temperatureText.color = new Color(1, 0, 0);
+            }
+            else if(temperature >= 60) 
+            {    
+                temperatureText.color = new Color(0, 0, 0);
+                GameOver();
+            }
         }
     }
 }
