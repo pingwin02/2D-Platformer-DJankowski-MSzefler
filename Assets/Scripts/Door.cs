@@ -7,31 +7,47 @@ public class Door : MonoBehaviour
 {
     GameObject lockIcon;
 
-    Vector2 endPosition;
+    Vector3 startPosition;
 
-    bool keyCollected;
+    Vector3 endPosition;
+
+    bool opening;
+
 
     private void Update()
     {
-        if (keyCollected)
+        if (opening)
         {
             this.transform.position = Vector2.MoveTowards(this.transform.position,
             endPosition, Time.deltaTime);
+        }
+        else
+        {
+            this.transform.position = Vector2.MoveTowards(this.transform.position,
+            startPosition, Time.deltaTime);
         }
     }
     private void Awake()
     {
         lockIcon = GameObject.FindGameObjectWithTag("Lock");
-        endPosition = this.transform.position;
+        startPosition = this.transform.position;
+        endPosition = startPosition;
+        endPosition.y += 3.25f;
+
     }
 
 
     [ContextMenu("Open")]
     public void Open()
     {
-        endPosition += new Vector2(0, 3);
+        opening = true;
         lockIcon.SetActive(false);
-        keyCollected = true;
-        
+    }
+
+    [ContextMenu("Close")]
+    public void Close()
+    {
+        opening = false;
+        lockIcon.SetActive(true);
     }
 }

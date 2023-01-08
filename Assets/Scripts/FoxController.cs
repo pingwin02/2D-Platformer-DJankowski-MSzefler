@@ -273,7 +273,7 @@ public class FoxController : MonoBehaviour
         else if (other.CompareTag("DoorKey"))
         {
             source.PlayOneShot(bonusSound, 2);
-            StartCoroutine(showDoorOpening());
+            StartCoroutine(showDoor());
             other.gameObject.SetActive(false);
 
         }
@@ -284,6 +284,11 @@ public class FoxController : MonoBehaviour
         else if (other.CompareTag("DungeonEntry"))
         {
             StartCoroutine(switchLight());
+        }
+        else if (other.CompareTag("DungeonTrap"))
+        {
+            StartCoroutine(showDoor());
+            other.GetComponent<BoxCollider2D>().enabled = false;
         }
     }
 
@@ -327,16 +332,21 @@ public class FoxController : MonoBehaviour
         }
     }
 
-    private IEnumerator showDoorOpening()
+    private IEnumerator showDoor()
     {
         _renderer.enabled = false;
         active = false;
+        _collider.enabled = false;
+        rigidBody.gravityScale = 0f;
+        rigidBody.velocity = Vector2.zero;
         Vector3 currentPosition = this.transform.position;
         Vector3 doorPosition = new Vector3(-28.5f, 1.65f, 0);
         this.transform.position = doorPosition;
         yield return new WaitForSeconds(3f);
         this.transform.position = currentPosition;
         _renderer.enabled = true;
+        _collider.enabled = true;
+        rigidBody.gravityScale = 2f;
         active = true;
     }
 
