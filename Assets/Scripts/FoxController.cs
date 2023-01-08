@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
+using UnityEngine.Rendering.Universal;
 
 public class FoxController : MonoBehaviour
 {
@@ -45,6 +47,10 @@ public class FoxController : MonoBehaviour
     [SerializeField] AudioClip heartSound;
 
     private AudioSource source;
+
+    public Light2D DayLight;
+
+    public Light2D DungeonLight;
 
     // Start is called before the first frame update
     void Start()
@@ -117,6 +123,9 @@ public class FoxController : MonoBehaviour
         animator = GetComponent<Animator>();
 
         source = GetComponent<AudioSource>();
+
+        DayLight.intensity = 1f;
+        DungeonLight.intensity = 0f;
     }
 
     bool isGrounded()
@@ -159,6 +168,8 @@ public class FoxController : MonoBehaviour
 
     public void Die()
     {
+        DayLight.intensity = 1f;
+        DungeonLight.intensity = 0f;
         if (!immortalMode)
         {
             active = false;
@@ -270,6 +281,10 @@ public class FoxController : MonoBehaviour
         {
             Die();
         }
+        else if (other.CompareTag("DungeonEntry"))
+        {
+            StartCoroutine(switchLight());
+        }
     }
 
     private void OnTriggerExit2D(Collider2D other)
@@ -283,6 +298,33 @@ public class FoxController : MonoBehaviour
     public bool GetAnimatorIsDead()
     {
         return animator.GetBool("isDead");
+    }
+
+    private IEnumerator switchLight()
+    {
+        if (DayLight.intensity == 1f)
+        {
+            for (float i = 0; i < 1; i += 0.01f)
+            {
+                DungeonLight.intensity = i;
+                DayLight.intensity = 1 - i;
+                yield return new WaitForSeconds(0.01f);
+            }
+            DayLight.intensity = 0f;
+            DungeonLight.intensity = 1f;
+        }
+        else
+        {
+            for (float i = 1; i >= 0 ; i -= 0.01f)
+            {
+                DungeonLight.intensity = i;
+                DayLight.intensity = 1 - i;
+                yield return new WaitForSeconds(0.01f);
+            }
+
+            DayLight.intensity = 1f;
+            DungeonLight.intensity = 0f;
+        }
     }
 
     private IEnumerator showDoorOpening()
