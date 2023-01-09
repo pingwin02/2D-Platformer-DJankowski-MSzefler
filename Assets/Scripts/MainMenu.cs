@@ -5,16 +5,14 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
+    public Canvas mainMenuCanvas;
+
+    public Canvas howToPlayCanvas;
+
+    private void Awake()
     {
-        
+        howToPlayCanvas.enabled = false;
     }
 
     public void OnLevel1ButtonPressed()
@@ -30,8 +28,20 @@ public class MainMenu : MonoBehaviour
         Application.Quit();
     }
 
+    public void OnHowToPlayButtonPressed()
+    {
+        mainMenuCanvas.enabled = false;
+        howToPlayCanvas.enabled = true;
+    }
+
     public void OnResetHighScoreButtonPressed()
     {
         PlayerPrefs.DeleteKey("HighScoreLevel1");
+    }
+
+    public void OnMainMenuButtonPressed()
+    {
+        mainMenuCanvas.enabled = true;
+        howToPlayCanvas.enabled = false;
     }
 }
