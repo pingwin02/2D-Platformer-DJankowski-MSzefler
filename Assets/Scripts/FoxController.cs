@@ -204,21 +204,6 @@ public class FoxController : MonoBehaviour
         _collider.enabled = true;
         MiniJump();
     }
-    private IEnumerator WinAnimation()
-    {
-        for (int i = 0; i < 2; i++)
-        {
-            yield return new WaitForSeconds(0.5f);
-            MiniJump();
-        }
-        yield return new WaitForSeconds(1.0f);
-        for (int i = 0; i < 2; i++)
-        {
-            yield return new WaitForSeconds(0.5f);
-            MiniJump();
-        }
-
-    }
 
     public void SetStartingPosition()
     {
@@ -285,7 +270,7 @@ public class FoxController : MonoBehaviour
         else if (other.CompareTag("DoorKey"))
         {
             source.PlayOneShot(bonusSound, 2);
-            StartCoroutine(showDoor());
+            StartCoroutine(showDoor(false));
             other.gameObject.SetActive(false);
 
         }
@@ -295,7 +280,7 @@ public class FoxController : MonoBehaviour
         }
         else if (other.CompareTag("DungeonTrap"))
         {
-            StartCoroutine(showDoor());
+            StartCoroutine(showDoor(true));
             other.GetComponent<BoxCollider2D>().enabled = false;
         }
     }
@@ -352,7 +337,7 @@ public class FoxController : MonoBehaviour
         yield return 0;
     }
 
-    private IEnumerator showDoor()
+    private IEnumerator showDoor(bool flag)
     {
         _renderer.enabled = false;
         active = false;
@@ -368,6 +353,12 @@ public class FoxController : MonoBehaviour
         _collider.enabled = true;
         rigidBody.gravityScale = 2f;
         active = true;
+        if (flag)
+        {
+            GameManager.instance.DungeonWarning();
+        }
+
+
     }
 
 }

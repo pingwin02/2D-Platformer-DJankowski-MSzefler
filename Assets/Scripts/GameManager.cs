@@ -71,7 +71,7 @@ public class GameManager : MonoBehaviour
 
     public TextMeshProUGUI dialogueText;
 
-    public string[] dialogueLines;
+    private string[] dialogueLines;
 
     public float dialogueTextSpeed;
 
@@ -141,6 +141,9 @@ public class GameManager : MonoBehaviour
         DayLight.color = new Color(1f, 1f, 1f);
 
         StartCoroutine(SetTemperatureText());
+
+        dialogueLines = new string[2];
+
     }
 
     public void OnResumeButtonClicked()
@@ -228,6 +231,14 @@ public class GameManager : MonoBehaviour
         SetGameState(GameState.GS_DIALOGUE);
     }
 
+    public void DungeonWarning()
+    {
+        dialogueLines[0] = "You have entered dark dungeons!";
+        dialogueLines[1] = "You are too afraid to double jump. Find a key to escape!";
+        StartDialogue();
+        Dialogue();
+    }
+
     public void LevelCompleted()
     {
         if (keysFound == keysNumber)
@@ -262,10 +273,10 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            dialogueLines[0] = "Collect all keys to finish the level!";
             dialogueLines[1] = "Remaining: " + (keysNumber - keysFound);
             StartDialogue();
             Dialogue();
-            //Debug.Log("Find all keys! Remaining: " + (keysNumber - keysFound));
         }
     }
 
@@ -372,7 +383,8 @@ public class GameManager : MonoBehaviour
         while (currentGameState == GameState.GS_GAME)
         {
             yield return new WaitForSeconds(5.0f);
-            temperature++;
+            if (currentGameState == GameState.GS_GAME)
+                temperature++;
             temperatureText.text = temperature + "°C";
             if (temperature >= 30 && temperature < 45)
             {
