@@ -52,6 +52,10 @@ public class FoxController : MonoBehaviour
 
     public Light2D DungeonLight;
 
+    private bool inDungeon = false;
+
+    private Vector3 dungeonRespPoint;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -107,6 +111,8 @@ public class FoxController : MonoBehaviour
         Debug.DrawRay(transform.position, Vector2.left * rayLength2, Color.white, 1, false);
         */
 
+        StartCoroutine(switchLight());
+
         animator.SetBool("isWalking", isWalking);
         animator.SetBool("isGrounded", isGrounded());
         animator.SetBool("isDead", false);
@@ -147,7 +153,7 @@ public class FoxController : MonoBehaviour
         {
             rigidBody.velocity = new Vector2(rigidBody.velocity.x, jumpForce);
         }
-        else if (!doubleJumped)
+        else if (!doubleJumped && !inDungeon)
         {
             DoubleJump();
         }
@@ -168,8 +174,6 @@ public class FoxController : MonoBehaviour
 
     public void Die()
     {
-        DayLight.intensity = 1f;
-        DungeonLight.intensity = 0f;
         if (!immortalMode)
         {
             active = false;
@@ -188,7 +192,14 @@ public class FoxController : MonoBehaviour
     private IEnumerator RespawnPlayer()
     {
         yield return new WaitForSeconds(1.5f);
-        transform.position = startPosition;
+        if (inDungeon)
+        {
+            transform.position = dungeonRespPoint;
+        }
+        else
+        {
+            transform.position = startPosition;
+        }
         active = true;
         _collider.enabled = true;
         MiniJump();
@@ -212,6 +223,7 @@ public class FoxController : MonoBehaviour
     public void SetStartingPosition()
     {
         startPosition = transform.position;
+        dungeonRespPoint = new Vector3(-35, 2, -2);
     }
 
     private void Flip()
@@ -281,10 +293,6 @@ public class FoxController : MonoBehaviour
         {
             Die();
         }
-        else if (other.CompareTag("DungeonEntry"))
-        {
-            StartCoroutine(switchLight());
-        }
         else if (other.CompareTag("DungeonTrap"))
         {
             StartCoroutine(showDoor());
@@ -300,14 +308,24 @@ public class FoxController : MonoBehaviour
         }
     }
 
-    public bool GetAnimatorIsDead()
+    public bool GetActive()
     {
-        return animator.GetBool("isDead");
+        return active;
     }
 
     private IEnumerator switchLight()
     {
-        if (DayLight.intensity == 1f)
+
+        if (this.transform.position.x < -30)
+        {
+            inDungeon = true;
+        }
+        else
+        {
+            inDungeon = false;
+        }
+
+        if (inDungeon && DayLight.intensity == 1f )
         {
             for (float i = 0; i < 1; i += 0.01f)
             {
@@ -318,7 +336,7 @@ public class FoxController : MonoBehaviour
             DayLight.intensity = 0f;
             DungeonLight.intensity = 1f;
         }
-        else
+        else if (!inDungeon && DayLight.intensity == 0f )
         {
             for (float i = 1; i >= 0 ; i -= 0.01f)
             {
@@ -330,6 +348,8 @@ public class FoxController : MonoBehaviour
             DayLight.intensity = 1f;
             DungeonLight.intensity = 0f;
         }
+
+        yield return 0;
     }
 
     private IEnumerator showDoor()

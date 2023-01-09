@@ -11,6 +11,9 @@ TagManager:
   - Heart
   - MovingPlatform
   - Crusher
+  - DungeonTrap
+  - DoorKey
+  - Lock
   layers:
   - Default
   - TransparentFX

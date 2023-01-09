@@ -25,7 +25,7 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player") && !fox.GetAnimatorIsDead())
+        if (other.CompareTag("Player") && fox.GetActive())
         {
             fox.Die();
         }
