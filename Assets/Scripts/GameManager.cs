@@ -103,6 +103,7 @@ public class GameManager : MonoBehaviour
         {
             timer += Time.deltaTime;
             timeText.text = FormatTime(timer);
+            SetTemperatureText();
         }
 
         if (Input.GetKeyDown(KeyCode.Space) && currentGameState == GameState.GS_DIALOGUE)
@@ -111,11 +112,12 @@ public class GameManager : MonoBehaviour
             {
                 NextLine();
             }
-            else
-            {
-                StopAllCoroutines();
-                dialogueText.text = dialogueLines[dialogueIndex];
-            }
+            // wylacza liczenie temperatury
+            //else
+            //{
+            //    StopAllCoroutines();
+            //    dialogueText.text = dialogueLines[dialogueIndex];
+            //}
         }
     }
 
@@ -140,9 +142,9 @@ public class GameManager : MonoBehaviour
 
         DayLight.color = new Color(1f, 1f, 1f);
 
-        StartCoroutine(SetTemperatureText());
-
         dialogueLines = new string[2];
+
+        StartCoroutine(addTemperature());
 
     }
 
@@ -226,17 +228,11 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
     }
 
-    public void Dialogue()
-    {
-        SetGameState(GameState.GS_DIALOGUE);
-    }
-
     public void DungeonWarning()
     {
         dialogueLines[0] = "You have entered dark dungeons!";
         dialogueLines[1] = "You are too afraid to double jump. Find a key to escape!";
         StartDialogue();
-        Dialogue();
     }
 
     public void LevelCompleted()
@@ -276,7 +272,6 @@ public class GameManager : MonoBehaviour
             dialogueLines[0] = "Collect all keys to finish the level!";
             dialogueLines[1] = "Remaining: " + (keysNumber - keysFound);
             StartDialogue();
-            Dialogue();
         }
     }
 
@@ -352,6 +347,7 @@ public class GameManager : MonoBehaviour
             dialogueIndex = 0;
             StartCoroutine(TypeLine());
         }
+        SetGameState(GameState.GS_DIALOGUE);
     }
 
     IEnumerator TypeLine()
@@ -378,29 +374,37 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    IEnumerator SetTemperatureText()
+    void SetTemperatureText()
     {
-        while (currentGameState == GameState.GS_GAME)
+        temperatureText.text = temperature + "°C";
+        if (temperature >= 30 && temperature < 45)
         {
-            yield return new WaitForSeconds(5.0f);
+            temperatureText.color = new Color(0.9f, 0.7f, 0);
+            DayLight.color = new Color(0.75f, 0.75f, 0.75f);
+        }
+        else if (temperature >= 45 && temperature < 60)
+        {
+            temperatureText.color = new Color(1, 0, 0);
+            DayLight.color = new Color(0.75f, 0.75f, 0.5f);
+        }
+        else if(temperature >= 60) 
+        {    
+            temperatureText.color = new Color(0, 0, 0);
+            GameOver();
+        }
+    }
+
+    IEnumerator addTemperature()
+    {
+        while (true)
+        {
             if (currentGameState == GameState.GS_GAME)
+            {
+                yield return new WaitForSeconds(5.0f);
                 temperature++;
-            temperatureText.text = temperature + "°C";
-            if (temperature >= 30 && temperature < 45)
-            {
-                temperatureText.color = new Color(0.9f, 0.7f, 0);
-                DayLight.color = new Color(0.75f, 0.75f, 0.5f);
             }
-            else if (temperature >= 45 && temperature < 60)
-            {
-                temperatureText.color = new Color(1, 0, 0);
-                DayLight.color = new Color(0.75f, 0.75f, 0f);
-            }
-            else if(temperature >= 60) 
-            {    
-                temperatureText.color = new Color(0, 0, 0);
-                GameOver();
-            }
+
+            yield return 0;
         }
     }
 }
