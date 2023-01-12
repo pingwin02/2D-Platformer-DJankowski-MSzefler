@@ -30,7 +30,8 @@ public class GeneratedPlatforms : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameManager.instance.currentGameState != GameState.GS_GAME) return;
+        if (GameManager.instance.currentGameState != GameState.GS_GAME
+            && GameManager.instance.currentGameState != GameState.GS_START) return;
 
         for (int i = 0; i <= numberOfPlatforms; i++) {
             currentPosition = (i + next) % numberOfPlatforms;

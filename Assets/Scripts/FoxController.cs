@@ -38,6 +38,8 @@ public class FoxController : MonoBehaviour
 
     private bool immortalMode = false;
 
+    private bool isStartMode = false;
+
     [SerializeField] AudioClip bonusSound;
 
     [SerializeField] AudioClip deathSound;
@@ -56,17 +58,36 @@ public class FoxController : MonoBehaviour
 
     private Vector3 dungeonRespPoint;
 
+    public GameObject[] startObjects;
+
+    public GameObject[] doorObject;
+
+    Vector3 currentPosition;
+
     // Start is called before the first frame update
     void Start()
     {
         _collider = GetComponent<Collider2D>();
         _renderer = GetComponent<SpriteRenderer>();
         SetStartingPosition();
-
+    
+        StartCoroutine(ShowObjects(false, startObjects));
     }
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Space) && isStartMode)
+        {
+            StopAllCoroutines();
+            GameManager.instance.InGame();
+            this.transform.position = currentPosition;
+            _renderer.enabled = true;
+            _collider.enabled = true;
+            rigidBody.gravityScale = 2f;
+            active = true;
+            isStartMode = false;
+            return;
+        }
 
         if (!active) return;
 
@@ -266,7 +287,7 @@ public class FoxController : MonoBehaviour
         else if (other.CompareTag("DoorKey"))
         {
             source.PlayOneShot(bonusSound, 2);
-            StartCoroutine(showDoor(false));
+            StartCoroutine(ShowObjects(false, doorObject));
             other.gameObject.SetActive(false);
 
         }
@@ -276,7 +297,7 @@ public class FoxController : MonoBehaviour
         }
         else if (other.CompareTag("DungeonTrap"))
         {
-            StartCoroutine(showDoor(true));
+            StartCoroutine(ShowObjects(true, doorObject));
             other.GetComponent<BoxCollider2D>().enabled = false;
         }
     }
@@ -333,16 +354,38 @@ public class FoxController : MonoBehaviour
         yield return 0;
     }
 
-    private IEnumerator showDoor(bool flag)
+    private IEnumerator ShowObjects(bool flag, GameObject[] keys)
+    {
+        isStartMode = true;
+        GameManager.instance.StartScreen();
+        foreach (GameObject key in keys)
+        {
+            if (key.transform.position.x < -28.0f)
+            {
+                DayLight.intensity = 0f;
+                DungeonLight.intensity = 1f;
+            }
+            else
+            {
+                DayLight.intensity = 1f;
+                DungeonLight.intensity = 0f;
+            }
+            StartCoroutine(showObject(flag, key.transform.position));
+            yield return new WaitForSeconds(3f);
+        }
+        GameManager.instance.InGame();
+        isStartMode = false;
+    }
+
+    private IEnumerator showObject(bool flag, Vector3 position)
     {
         _renderer.enabled = false;
         active = false;
         _collider.enabled = false;
         rigidBody.gravityScale = 0f;
         rigidBody.velocity = Vector2.zero;
-        Vector3 currentPosition = this.transform.position;
-        Vector3 doorPosition = new Vector3(-28.5f, 1.65f, 0);
-        this.transform.position = doorPosition;
+        currentPosition = this.transform.position;
+        this.transform.position = position;
         yield return new WaitForSeconds(3f);
         this.transform.position = currentPosition;
         _renderer.enabled = true;
@@ -353,8 +396,6 @@ public class FoxController : MonoBehaviour
         {
             GameManager.instance.DungeonWarning();
         }
-
-
     }
 
 }

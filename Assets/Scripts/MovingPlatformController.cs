@@ -22,7 +22,8 @@ public class MovingPlatformController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameManager.instance.currentGameState != GameState.GS_GAME) return;
+        if (GameManager.instance.currentGameState != GameState.GS_GAME
+            && GameManager.instance.currentGameState != GameState.GS_START) return;
 
         if (isMovingRight)
         {

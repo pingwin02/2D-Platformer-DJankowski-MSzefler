@@ -30,7 +30,8 @@ public class EnemyController : MonoBehaviour
     {
         animator.SetBool("isMoving", isMoving);
 
-        if (!isMoving || GameManager.instance.currentGameState != GameState.GS_GAME) return;
+        if (!isMoving || GameManager.instance.currentGameState != GameState.GS_GAME 
+            && GameManager.instance.currentGameState != GameState.GS_START) return;
 
         if (isMovingRight)
         {
