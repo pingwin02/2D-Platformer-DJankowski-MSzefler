@@ -7,11 +7,11 @@ using System.Security.Cryptography;
 using UnityEngine.SceneManagement;
 using UnityEngine.Rendering.Universal;
 
-public enum GameState { GS_PAUSEMENU, GS_GAME, GS_LEVELCOMPLETED, GS_GAME_OVER, GS_OPTIONS, GS_DIALOGUE }
+public enum GameState { GS_PAUSEMENU, GS_GAME, GS_LEVELCOMPLETED, GS_GAME_OVER, GS_OPTIONS, GS_DIALOGUE, GS_START }
 
 public class GameManager : MonoBehaviour
 {
-    public GameState currentGameState = GameState.GS_PAUSEMENU;
+    public GameState currentGameState = GameState.GS_START;
 
     public Canvas inGameCanvas;
 
@@ -37,7 +37,9 @@ public class GameManager : MonoBehaviour
 
     public TMP_Text timeText;
 
-    private float timer = 0;
+    public float timer = 0;
+
+    private float offsetTimer = 0;
 
     public TMP_Text temperatureText;
 
@@ -79,6 +81,8 @@ public class GameManager : MonoBehaviour
 
     public Light2D DayLight;
 
+    public Canvas startScreenCanvas;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -88,37 +92,46 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (currentGameState != GameState.GS_START)
         {
-            if(currentGameState == GameState.GS_PAUSEMENU)
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
-                InGame();
+                if (currentGameState == GameState.GS_PAUSEMENU)
+                {
+                    InGame();
+                }
+                else if (currentGameState == GameState.GS_GAME)
+                {
+                    PauseMenu();
+                }
             }
-            else if (currentGameState == GameState.GS_GAME)
+            if (currentGameState == GameState.GS_GAME)
             {
-                PauseMenu();
+                timer += Time.deltaTime;
+                offsetTimer += Time.deltaTime;
+                if (offsetTimer > 5)
+                {
+                    offsetTimer = 0;
+                    temperature++;
+                    SetTemperatureText();
+                }
+                timeText.text = FormatTime(timer);
+                
             }
-        }
-        if (currentGameState == GameState.GS_GAME)
-        {
-            timer += Time.deltaTime;
-            timeText.text = FormatTime(timer);
-            SetTemperatureText();
-        }
 
-        if (Input.GetKeyDown(KeyCode.Space) && currentGameState == GameState.GS_DIALOGUE)
-        {
-            if (dialogueText.text == dialogueLines[dialogueIndex])
+            if (Input.GetKeyDown(KeyCode.Space) && currentGameState == GameState.GS_DIALOGUE)
             {
-                NextLine();
+                if (dialogueText.text == dialogueLines[dialogueIndex])
+                {
+                    NextLine();
+                }
+                else
+                {
+                    StopAllCoroutines();
+                    dialogueText.text = dialogueLines[dialogueIndex];
+                }
             }
-            // wylacza liczenie temperatury
-            //else
-            //{
-            //    StopAllCoroutines();
-            //    dialogueText.text = dialogueLines[dialogueIndex];
-            //}
-        }
+        }    
     }
 
     private void Awake()
@@ -143,9 +156,6 @@ public class GameManager : MonoBehaviour
         DayLight.color = new Color(1f, 1f, 1f);
 
         dialogueLines = new string[2];
-
-        StartCoroutine(addTemperature());
-
     }
 
     public void OnResumeButtonClicked()
@@ -187,6 +197,7 @@ public class GameManager : MonoBehaviour
         optionsCanvas.enabled = (currentGameState == GameState.GS_OPTIONS);
         gameoverCanvas.enabled = (currentGameState == GameState.GS_GAME_OVER);
         dialogueCanvas.enabled = (currentGameState == GameState.GS_DIALOGUE);
+        startScreenCanvas.enabled = (currentGameState == GameState.GS_START);
     }
 
     public void PauseMenu()
@@ -225,6 +236,7 @@ public class GameManager : MonoBehaviour
     public void InGame()
     {
         SetGameState(GameState.GS_GAME);
+        inGameCanvas.enabled = true;
         Time.timeScale = 1f;
     }
 
@@ -235,6 +247,11 @@ public class GameManager : MonoBehaviour
         StartDialogue();
     }
 
+    public void StartScreen()
+    {
+        SetGameState(GameState.GS_START);
+        inGameCanvas.enabled = false;
+    }
     public void LevelCompleted()
     {
         if (keysFound == keysNumber)
@@ -391,20 +408,6 @@ public class GameManager : MonoBehaviour
         {    
             temperatureText.color = new Color(0, 0, 0);
             GameOver();
-        }
-    }
-
-    IEnumerator addTemperature()
-    {
-        while (true)
-        {
-            if (currentGameState == GameState.GS_GAME)
-            {
-                yield return new WaitForSeconds(5.0f);
-                temperature++;
-            }
-
-            yield return 0;
         }
     }
 }

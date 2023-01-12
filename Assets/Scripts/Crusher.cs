@@ -22,7 +22,7 @@ public class Crusher : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        startTime = Time.time;
+        startTime = GameManager.instance.timer;
     }
 
     // Update is called once per frame
@@ -30,7 +30,7 @@ public class Crusher : MonoBehaviour
     {
         if (GameManager.instance.currentGameState != GameState.GS_GAME) return;
 
-        if (Time.time - startTime >= delayTime)
+        if (GameManager.instance.timer - startTime >= delayTime)
         {
             if (transform.position.y >= up.position.y)
             {

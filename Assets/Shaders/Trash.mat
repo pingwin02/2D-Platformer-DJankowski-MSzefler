@@ -51,7 +51,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _HighlightsSpread: 3.5
-    - _MovementSpeed: 0.5
+    - _MovementSpeed: 2
     - _QueueControl: 0
     - _QueueOffset: 0
     - _Scale: 1.3
