@@ -32,6 +32,9 @@ public class Turret : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+            if (GameManager.instance.currentGameState != GameState.GS_GAME
+        && GameManager.instance.currentGameState != GameState.GS_START) return;
+
         Vector2 targetPos = Target.position;
         Direction = targetPos - (Vector2)transform.position;
         RaycastHit2D rayInfo = Physics2D.Raycast(transform.position, Direction, Range);

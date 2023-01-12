@@ -191,7 +191,7 @@ public class GameManager : MonoBehaviour
 
         source = GetComponent<AudioSource>();
 
-        source.volume = 0.1f;
+        source.volume = 1f;
     }
 
     public void OnResumeButtonClicked()
@@ -346,7 +346,7 @@ public class GameManager : MonoBehaviour
             ScoreText.text += " = " + score;
             HighScoreText.text = "Your best score: " + PlayerPrefs.GetInt(keyHighScore);
             source.clip = null;
-            source.PlayOneShot(levelCompletedMusic, 50);
+            source.PlayOneShot(levelCompletedMusic, 1);
         }
         else
         {
@@ -360,7 +360,7 @@ public class GameManager : MonoBehaviour
     {
         SetGameState(GameState.GS_GAME_OVER);
         StartCoroutine(FadeLose());
-        source.PlayOneShot(gameOverMusic, 50);
+        source.PlayOneShot(gameOverMusic, 1);
 
     }
 

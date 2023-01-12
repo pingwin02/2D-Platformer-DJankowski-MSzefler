@@ -198,7 +198,7 @@ public class FoxController : MonoBehaviour
 
     public void Die()
     {
-        if (!GameManager.instance.immortalMode)
+        if (!GameManager.instance.immortalMode && GameManager.instance.currentGameState == GameState.GS_GAME)
         {
             active = false;
             animator.SetBool("isDead", true);
@@ -208,9 +208,7 @@ public class FoxController : MonoBehaviour
             rigidBody.velocity = Vector3.zero;
             MiniJump();
             GameManager.instance.AddHealth(-1);
-
-            if (GameManager.instance.currentGameState == GameState.GS_GAME)
-                StartCoroutine(RespawnPlayer());
+            StartCoroutine(RespawnPlayer());
         }
     }
 
