@@ -60,6 +60,10 @@ public class FoxController : MonoBehaviour
 
     public GameObject[] startObjects;
 
+    public GameObject[] doorObject;
+
+    Vector3 currentPosition;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -67,7 +71,7 @@ public class FoxController : MonoBehaviour
         _renderer = GetComponent<SpriteRenderer>();
         SetStartingPosition();
     
-        StartCoroutine(ShowKeys(startObjects));
+        StartCoroutine(ShowObjects(false, startObjects));
     }
     // Update is called once per frame
     void Update()
@@ -76,7 +80,7 @@ public class FoxController : MonoBehaviour
         {
             StopAllCoroutines();
             GameManager.instance.InGame();
-            this.transform.position = startPosition;
+            this.transform.position = currentPosition;
             _renderer.enabled = true;
             _collider.enabled = true;
             rigidBody.gravityScale = 2f;
@@ -287,8 +291,7 @@ public class FoxController : MonoBehaviour
         else if (other.CompareTag("DoorKey"))
         {
             source.PlayOneShot(bonusSound, 2);
-            Vector3 doorPosition = new Vector3(-28.5f, 1.65f, 0);
-            StartCoroutine(showObject(false, doorPosition));
+            StartCoroutine(ShowObjects(false, doorObject));
             other.gameObject.SetActive(false);
 
         }
@@ -298,8 +301,7 @@ public class FoxController : MonoBehaviour
         }
         else if (other.CompareTag("DungeonTrap"))
         {
-            Vector3 doorPosition = new Vector3(-28.5f, 1.65f, 0);
-            StartCoroutine(showObject(true, doorPosition));
+            StartCoroutine(ShowObjects(true, doorObject));
             other.GetComponent<BoxCollider2D>().enabled = false;
         }
     }
@@ -356,14 +358,13 @@ public class FoxController : MonoBehaviour
         yield return 0;
     }
 
-    private IEnumerator ShowKeys(GameObject[] keys)
+    private IEnumerator ShowObjects(bool flag, GameObject[] keys)
     {
         isStartMode = true;
-        active = false;
         GameManager.instance.StartScreen();
         foreach (GameObject key in keys)
         {
-            if (key.transform.position.x < -30.0f)
+            if (key.transform.position.x < -28.0f)
             {
                 DayLight.intensity = 0f;
                 DungeonLight.intensity = 1f;
@@ -373,11 +374,10 @@ public class FoxController : MonoBehaviour
                 DayLight.intensity = 1f;
                 DungeonLight.intensity = 0f;
             }
-            StartCoroutine(showObject(false, key.transform.position));
+            StartCoroutine(showObject(flag, key.transform.position));
             yield return new WaitForSeconds(3f);
         }
         GameManager.instance.InGame();
-        active = true;
         isStartMode = false;
     }
 
@@ -388,7 +388,7 @@ public class FoxController : MonoBehaviour
         _collider.enabled = false;
         rigidBody.gravityScale = 0f;
         rigidBody.velocity = Vector2.zero;
-        Vector3 currentPosition = this.transform.position;
+        currentPosition = this.transform.position;
         this.transform.position = position;
         yield return new WaitForSeconds(3f);
         this.transform.position = currentPosition;
