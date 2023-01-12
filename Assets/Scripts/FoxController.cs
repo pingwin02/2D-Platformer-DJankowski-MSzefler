@@ -36,8 +36,6 @@ public class FoxController : MonoBehaviour
 
     private bool doubleJumped = false;
 
-    private bool immortalMode = false;
-
     [SerializeField] AudioClip bonusSound;
 
     [SerializeField] AudioClip deathSound;
@@ -45,10 +43,6 @@ public class FoxController : MonoBehaviour
     [SerializeField] AudioClip killSound;
 
     [SerializeField] AudioClip heartSound;
-
-    [SerializeField] AudioClip gameOverMusic;
-
-    [SerializeField] AudioClip levelCompletedMusic;
 
     private AudioSource source;
 
@@ -98,19 +92,18 @@ public class FoxController : MonoBehaviour
             return;
         }
 
+        if(GameManager.instance.currentGameState == GameState.GS_LEVELCOMPLETED ||
+            GameManager.instance.currentGameState == GameState.GS_GAME_OVER)
+        {
+            source.clip = null;
+        }
+
         if (!active) return;
 
         isWalking = false;
 
         if (GameManager.instance.currentGameState == GameState.GS_GAME)
         {
-
-            #if UNITY_EDITOR
-                if (Input.GetKeyDown(KeyCode.G))
-                {
-                    immortalMode = !immortalMode;
-                }
-            #endif
 
             if ((Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) && !isWall(Vector2.right))
             {
@@ -180,7 +173,7 @@ public class FoxController : MonoBehaviour
 
     void Jump()
     {
-        if (isGrounded())
+        if (isGrounded() || GameManager.instance.immortalMode)
         {
             rigidBody.velocity = new Vector2(rigidBody.velocity.x, jumpForce);
         }
@@ -205,7 +198,7 @@ public class FoxController : MonoBehaviour
 
     public void Die()
     {
-        if (!immortalMode)
+        if (!GameManager.instance.immortalMode)
         {
             active = false;
             animator.SetBool("isDead", true);
@@ -218,11 +211,6 @@ public class FoxController : MonoBehaviour
 
             if (GameManager.instance.currentGameState == GameState.GS_GAME)
                 StartCoroutine(RespawnPlayer());
-            if (GameManager.instance.currentGameState == GameState.GS_GAME_OVER)
-            {
-                source.clip = null;
-                source.PlayOneShot(gameOverMusic, 50);
-            }
         }
     }
 
@@ -267,11 +255,6 @@ public class FoxController : MonoBehaviour
         else if (other.CompareTag("Finish"))
         {
             GameManager.instance.LevelCompleted();
-            if (GameManager.instance.currentGameState == GameState.GS_LEVELCOMPLETED)
-            {
-                source.clip = null;
-                source.PlayOneShot(levelCompletedMusic, 50);
-            }
         }
         else if (other.CompareTag("Enemy"))
         {

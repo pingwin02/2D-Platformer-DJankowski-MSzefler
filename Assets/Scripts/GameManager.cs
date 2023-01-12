@@ -6,6 +6,7 @@ using TMPro;
 using System.Security.Cryptography;
 using UnityEngine.SceneManagement;
 using UnityEngine.Rendering.Universal;
+using static Unity.VisualScripting.Member;
 
 public enum GameState { GS_PAUSEMENU, GS_GAME, GS_LEVELCOMPLETED, GS_GAME_OVER, GS_OPTIONS, GS_DIALOGUE, GS_START }
 
@@ -75,6 +76,12 @@ public class GameManager : MonoBehaviour
 
     public Image fadeImageWin;
 
+    [SerializeField] AudioClip gameOverMusic;
+
+    [SerializeField] AudioClip levelCompletedMusic;
+
+    private AudioSource source;
+
     // Dialogue variables
 
     public Canvas dialogueCanvas;
@@ -90,6 +97,8 @@ public class GameManager : MonoBehaviour
     public Light2D DayLight;
 
     public Canvas startScreenCanvas;
+
+    public bool immortalMode = false;
 
     // Start is called before the first frame update
     void Start()
@@ -117,7 +126,7 @@ public class GameManager : MonoBehaviour
             {
                 timer += Time.deltaTime;
                 offsetTimer += Time.deltaTime;
-                if (offsetTimer > 5)
+                if (offsetTimer > 5 || (immortalMode && offsetTimer > 1))
                 {
                     offsetTimer = 0;
                     temperature++;
@@ -139,7 +148,14 @@ public class GameManager : MonoBehaviour
                     dialogueText.text = dialogueLines[dialogueIndex];
                 }
             }
-        }    
+
+            #if UNITY_EDITOR
+                if (Input.GetKeyDown(KeyCode.G))
+                {
+                    immortalMode = !immortalMode;
+                }
+            #endif
+        }
     }
 
     private void Awake()
@@ -172,6 +188,10 @@ public class GameManager : MonoBehaviour
         DayLight.color = new Color(1f, 1f, 1f);
 
         dialogueLines = new string[2];
+
+        source = GetComponent<AudioSource>();
+
+        source.volume = 0.1f;
     }
 
     public void OnResumeButtonClicked()
@@ -296,7 +316,7 @@ public class GameManager : MonoBehaviour
     }
     public void LevelCompleted()
     {
-        if (keysFound == keysNumber)
+        if (keysFound == keysNumber || immortalMode)
         {
             score += health;
             score += enemyCount;
@@ -325,6 +345,8 @@ public class GameManager : MonoBehaviour
             StartCoroutine(FadeWin());
             ScoreText.text += " = " + score;
             HighScoreText.text = "Your best score: " + PlayerPrefs.GetInt(keyHighScore);
+            source.clip = null;
+            source.PlayOneShot(levelCompletedMusic, 50);
         }
         else
         {
@@ -338,6 +360,8 @@ public class GameManager : MonoBehaviour
     {
         SetGameState(GameState.GS_GAME_OVER);
         StartCoroutine(FadeLose());
+        source.PlayOneShot(gameOverMusic, 50);
+
     }
 
     private IEnumerator FadeLose()
