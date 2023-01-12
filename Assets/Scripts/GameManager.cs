@@ -266,6 +266,28 @@ public class GameManager : MonoBehaviour
         dialogueLines[1] = "You are too afraid to double jump. Find a key to escape!";
         StartDialogue();
     }
+    public void SignInfo(int nr)
+    {
+        switch (nr)
+        {
+            case 1:
+                dialogueLines[0] = "Global warming is the long-term warming";
+                dialogueLines[1] = "of the planet’s overall temperature.";
+                break;
+            case 2:
+                dialogueLines[0] = "The greenhouse effect is when the sun’s rays penetrate the atmosphere,";
+                dialogueLines[1] = "but when that heat is reflected off the surface cannot escape back into space.";
+                break;
+            case 3:
+                dialogueLines[0] = "Global warming causes climate change, which poses a serious threat to life on Earth";
+                dialogueLines[1] = "in the forms of widespread flooding and extreme weather.";
+                break;
+            default: return;
+
+        }
+
+        StartDialogue();
+    }
 
     public void StartScreen()
     {
