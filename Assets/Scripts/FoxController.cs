@@ -16,9 +16,9 @@ public class FoxController : MonoBehaviour
 
     public LayerMask groundLayer;
 
-    const float rayLength = 1.50f;
+    public float rayLength = 1.50f;
 
-    const float rayLength2 = 0.75f;
+    public float rayLength2 = 0.7f;
 
     private Collider2D _collider;
 
@@ -80,19 +80,15 @@ public class FoxController : MonoBehaviour
                 immortalMode = !immortalMode;
             }
 
-            if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
+            if ((Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) && !isWall(Vector2.right))
             {
-                if (!isWall())
-                    rigidBody.velocity *= new Vector2(0, 1);
                 transform.Translate(moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
                 isWalking = true;
 
                 if (!isFacingRight) Flip();
             }
-            if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
+            if ((Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) && !isWall(Vector2.left))
             {
-                if (!isWall())
-                    rigidBody.velocity *= new Vector2(0, 1);
                 transform.Translate(-moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
                 isWalking = true;
 
@@ -103,13 +99,13 @@ public class FoxController : MonoBehaviour
                 Jump();
             }
         }
-        /*
+        
         Debug.DrawRay(transform.position, rayLength * Vector3.down, Color.white, 1, false);
         Debug.DrawRay(transform.position - new Vector3(0.3f, 0, 0), rayLength * Vector3.down, Color.white, 1, false);
         Debug.DrawRay(transform.position + new Vector3(0.3f, 0, 0), rayLength * Vector3.down, Color.white, 1, false);
         Debug.DrawRay(transform.position, Vector2.right * rayLength2, Color.white, 1, false);
         Debug.DrawRay(transform.position, Vector2.left * rayLength2, Color.white, 1, false);
-        */
+        
 
         StartCoroutine(switchLight());
 
@@ -132,6 +128,7 @@ public class FoxController : MonoBehaviour
 
         DayLight.intensity = 1f;
         DungeonLight.intensity = 0f;
+
     }
 
     bool isGrounded()
@@ -141,10 +138,9 @@ public class FoxController : MonoBehaviour
             Physics2D.Raycast(this.transform.position, Vector2.down, rayLength, groundLayer.value));
     }
 
-    bool isWall()
+    bool isWall(Vector2 direction)
     {
-        return (Physics2D.Raycast(transform.position, Vector2.right, rayLength2, groundLayer.value) ||
-            Physics2D.Raycast(transform.position, Vector2.left, rayLength2, groundLayer.value));
+        return (Physics2D.Raycast(transform.position, direction, rayLength2, groundLayer.value));
     }
 
     void Jump()
@@ -233,7 +229,7 @@ public class FoxController : MonoBehaviour
         }
         else if (other.CompareTag("Enemy"))
         {
-            if (transform.position.y > other.gameObject.transform.position.y + 1.15f)
+            if (transform.position.y > other.gameObject.transform.position.y)
             {
                 animator.SetBool("didKill", true);
                 MiniJump();
