@@ -89,7 +89,7 @@ public class EnemyController : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            if (transform.position.y < other.gameObject.transform.position.y)
+            if (transform.position.y < other.gameObject.transform.position.y - 0.8)
             {
                 isMoving = false;
                 _collider.enabled = false;

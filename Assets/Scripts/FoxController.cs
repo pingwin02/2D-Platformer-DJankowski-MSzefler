@@ -16,9 +16,9 @@ public class FoxController : MonoBehaviour
 
     public LayerMask groundLayer;
 
-    public float rayLength = 1.50f;
+    const float rayLength = 1.50f;
 
-    public float rayLength2 = 0.7f;
+    const float rayLength2 = 0.7f;
 
     private Collider2D _collider;
 
@@ -48,6 +48,10 @@ public class FoxController : MonoBehaviour
 
     [SerializeField] AudioClip heartSound;
 
+    [SerializeField] AudioClip gameOverMusic;
+
+    [SerializeField] AudioClip levelCompletedMusic;
+
     private AudioSource source;
 
     public Light2D DayLight;
@@ -55,6 +59,8 @@ public class FoxController : MonoBehaviour
     public Light2D DungeonLight;
 
     private bool inDungeon = false;
+
+    private bool skullsWarning = false;
 
     private Vector3 dungeonRespPoint;
 
@@ -64,6 +70,7 @@ public class FoxController : MonoBehaviour
 
     Vector3 currentPosition;
 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -71,7 +78,7 @@ public class FoxController : MonoBehaviour
         _renderer = GetComponent<SpriteRenderer>();
         SetStartingPosition();
     
-        StartCoroutine(ShowObjects(false, startObjects));
+        StartCoroutine(ShowObjects(startObjects));
     }
     // Update is called once per frame
     void Update()
@@ -86,6 +93,12 @@ public class FoxController : MonoBehaviour
             rigidBody.gravityScale = 2f;
             active = true;
             isStartMode = false;
+
+            if (skullsWarning)
+            {
+                GameManager.instance.DungeonWarning();
+                skullsWarning = false;
+            }
             return;
         }
 
@@ -96,10 +109,12 @@ public class FoxController : MonoBehaviour
         if (GameManager.instance.currentGameState == GameState.GS_GAME)
         {
 
-            if (Input.GetKeyDown(KeyCode.G))
-            {
-                immortalMode = !immortalMode;
-            }
+            #if UNITY_EDITOR
+                if (Input.GetKeyDown(KeyCode.G))
+                {
+                    immortalMode = !immortalMode;
+                }
+            #endif
 
             if ((Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) && !isWall(Vector2.right))
             {
@@ -137,6 +152,7 @@ public class FoxController : MonoBehaviour
         {
             animator.SetBool("didKill", false);
             doubleJumped = false;
+            rigidBody.velocity *= new Vector2(0, 1);
         }
     }
     void Awake()
@@ -149,6 +165,8 @@ public class FoxController : MonoBehaviour
 
         DayLight.intensity = 1f;
         DungeonLight.intensity = 0f;
+
+        source.volume = 0.1f;
 
     }
 
@@ -195,6 +213,7 @@ public class FoxController : MonoBehaviour
         {
             active = false;
             animator.SetBool("isDead", true);
+            animator.SetBool("didKill", false);
             source.PlayOneShot(deathSound, 25);
             _collider.enabled = false;
             rigidBody.velocity = Vector3.zero;
@@ -203,6 +222,11 @@ public class FoxController : MonoBehaviour
 
             if (GameManager.instance.currentGameState == GameState.GS_GAME)
                 StartCoroutine(RespawnPlayer());
+            if (GameManager.instance.currentGameState == GameState.GS_GAME_OVER)
+            {
+                source.clip = null;
+                source.PlayOneShot(gameOverMusic, 50);
+            }
         }
     }
 
@@ -247,10 +271,15 @@ public class FoxController : MonoBehaviour
         else if (other.CompareTag("Finish"))
         {
             GameManager.instance.LevelCompleted();
+            if (GameManager.instance.currentGameState == GameState.GS_LEVELCOMPLETED)
+            {
+                source.clip = null;
+                source.PlayOneShot(levelCompletedMusic, 50);
+            }
         }
         else if (other.CompareTag("Enemy"))
         {
-            if (transform.position.y > other.gameObject.transform.position.y)
+            if (transform.position.y - 0.8 > other.gameObject.transform.position.y)
             {
                 animator.SetBool("didKill", true);
                 MiniJump();
@@ -287,7 +316,7 @@ public class FoxController : MonoBehaviour
         else if (other.CompareTag("DoorKey"))
         {
             source.PlayOneShot(bonusSound, 2);
-            StartCoroutine(ShowObjects(false, doorObject));
+            StartCoroutine(ShowObjects(doorObject));
             other.gameObject.SetActive(false);
 
         }
@@ -297,7 +326,8 @@ public class FoxController : MonoBehaviour
         }
         else if (other.CompareTag("DungeonTrap"))
         {
-            StartCoroutine(ShowObjects(true, doorObject));
+            skullsWarning = true;
+            StartCoroutine(ShowObjects(doorObject));
             other.GetComponent<BoxCollider2D>().enabled = false;
         }
     }
@@ -354,7 +384,7 @@ public class FoxController : MonoBehaviour
         yield return 0;
     }
 
-    private IEnumerator ShowObjects(bool flag, GameObject[] keys)
+    private IEnumerator ShowObjects(GameObject[] keys)
     {
         isStartMode = true;
         GameManager.instance.StartScreen();
@@ -370,14 +400,14 @@ public class FoxController : MonoBehaviour
                 DayLight.intensity = 1f;
                 DungeonLight.intensity = 0f;
             }
-            StartCoroutine(showObject(flag, key.transform.position));
+            StartCoroutine(showObject(key.transform.position));
             yield return new WaitForSeconds(3f);
         }
         GameManager.instance.InGame();
         isStartMode = false;
     }
 
-    private IEnumerator showObject(bool flag, Vector3 position)
+    private IEnumerator showObject(Vector3 position)
     {
         _renderer.enabled = false;
         active = false;
@@ -392,7 +422,7 @@ public class FoxController : MonoBehaviour
         _collider.enabled = true;
         rigidBody.gravityScale = 2f;
         active = true;
-        if (flag)
+        if (skullsWarning)
         {
             GameManager.instance.DungeonWarning();
         }

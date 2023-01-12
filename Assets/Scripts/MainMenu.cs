@@ -10,9 +10,17 @@ public class MainMenu : MonoBehaviour
 
     public Canvas howToPlayCanvas;
 
+    const string keyVolume = "VolumeSetting";
+
+    const string keyQuality = "QualitySetting";
+
     private void Awake()
     {
         howToPlayCanvas.enabled = false;
+
+        QualitySettings.SetQualityLevel(PlayerPrefs.GetInt(keyQuality, QualitySettings.GetQualityLevel()));
+
+        AudioListener.volume = (float)PlayerPrefs.GetInt(keyVolume, 10) / 100;
     }
 
     public void OnLevel1ButtonPressed()
@@ -34,9 +42,9 @@ public class MainMenu : MonoBehaviour
         howToPlayCanvas.enabled = true;
     }
 
-    public void OnResetHighScoreButtonPressed()
+    public void OnResetPressed()
     {
-        PlayerPrefs.DeleteKey("HighScoreLevel1");
+        PlayerPrefs.DeleteAll();
     }
 
     public void OnMainMenuButtonPressed()

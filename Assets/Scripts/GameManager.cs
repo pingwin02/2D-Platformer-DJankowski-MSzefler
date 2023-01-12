@@ -51,13 +51,21 @@ public class GameManager : MonoBehaviour
 
     const string keyHighScore = "HighScoreLevel1";
 
+    const string keyVolume = "VolumeSetting";
+
+    const string keyQuality = "QualitySetting";
+
     public TMP_Text ScoreText;
 
     public TMP_Text HighScoreText;
 
     public Canvas optionsCanvas;
 
+    public GameObject optionsButton;
+
     public TMP_Text volumeText;
+
+    public Slider volumeSlider;
 
     public TMP_Text qualityText;
 
@@ -151,7 +159,15 @@ public class GameManager : MonoBehaviour
             PlayerPrefs.SetInt(keyHighScore, 0);
         }
 
-        AudioListener.volume = 0.05f;
+        QualitySettings.SetQualityLevel(PlayerPrefs.GetInt(keyQuality, QualitySettings.GetQualityLevel()));
+
+        qualityText.text = "Quality: " + QualitySettings.names[QualitySettings.GetQualityLevel()];
+
+        AudioListener.volume = (float)PlayerPrefs.GetInt(keyVolume, 10) / 100;
+
+        volumeSlider.value = PlayerPrefs.GetInt(keyVolume, 10);
+
+        SetVolume(volumeSlider);
 
         DayLight.color = new Color(1f, 1f, 1f);
 
@@ -198,6 +214,7 @@ public class GameManager : MonoBehaviour
         gameoverCanvas.enabled = (currentGameState == GameState.GS_GAME_OVER);
         dialogueCanvas.enabled = (currentGameState == GameState.GS_DIALOGUE);
         startScreenCanvas.enabled = (currentGameState == GameState.GS_START);
+        optionsButton.SetActive(currentGameState == GameState.GS_GAME);
     }
 
     public void PauseMenu()
@@ -219,18 +236,21 @@ public class GameManager : MonoBehaviour
     {
         QualitySettings.IncreaseLevel();
         qualityText.text = "Quality: " + QualitySettings.names[QualitySettings.GetQualityLevel()];
+        PlayerPrefs.SetInt(keyQuality, QualitySettings.GetQualityLevel());
     }
 
     public void QualityDown()
     {
         QualitySettings.DecreaseLevel();
         qualityText.text = "Quality: " + QualitySettings.names[QualitySettings.GetQualityLevel()];
+        PlayerPrefs.SetInt(keyQuality, QualitySettings.GetQualityLevel());
     }
 
     public void SetVolume(Slider vol)
     {
         AudioListener.volume = vol.value / 100;
         volumeText.text = "Master volume: " + vol.value + " %";
+        PlayerPrefs.SetInt(keyVolume, (int)vol.value);
     }
 
     public void InGame()
@@ -296,7 +316,6 @@ public class GameManager : MonoBehaviour
     {
         SetGameState(GameState.GS_GAME_OVER);
         StartCoroutine(FadeLose());
-        AudioListener.volume = 0f;
     }
 
     private IEnumerator FadeLose()

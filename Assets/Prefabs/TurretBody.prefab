@@ -214,7 +214,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a270096fa4417fa4d90b5358954354dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Range: 10
+  Range: 9
   Target: {fileID: 0}
   Gun: {fileID: 4008033367616346650}
   bullet: {fileID: 7414358199326039476, guid: d886f5cda736f9b4c999f58cc7e4366f, type: 3}
