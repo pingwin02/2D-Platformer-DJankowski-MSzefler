@@ -105,21 +105,21 @@ public class FoxController : MonoBehaviour
         if (GameManager.instance.currentGameState == GameState.GS_GAME)
         {
 
-            if ((Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) && !isWall(Vector2.right))
+            if (Input.GetKey(KeyCode.D) && !isWall(Vector2.right))
             {
                 transform.Translate(moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
                 isWalking = true;
 
                 if (!isFacingRight) Flip();
             }
-            if ((Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) && !isWall(Vector2.left))
+            if (Input.GetKey(KeyCode.A) && !isWall(Vector2.left))
             {
                 transform.Translate(-moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
                 isWalking = true;
 
                 if (isFacingRight) Flip();
             }
-            if (Input.GetKey(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space))
             {
                 Jump();
             }

@@ -42021,8 +42021,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1481591384}
   m_HandleRect: {fileID: 1481591383}
   m_Direction: 2
-  m_Value: 1.0000012
-  m_Size: 0.46737263
+  m_Value: 1.0000013
+  m_Size: 0.4673727
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -42251,12 +42251,12 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "1. Goal:\\nCollect all 3 cherries to complete the level\\n\r\n2. Controls:\\nW
-    - UP\\n A - LEFT\\n D - RIGHT\\n S - DOWN \\nSPACE - JUMP & DOUBLEJUMP\\n \r\n3.
-    Points:\\nCollect gems and heart, kill enemies and finish level below 3 minute
-    mark for bonus points\\n\r\n4. Warning:\\nBeware of the temperature. Finish level
-    before it hits 60\xB0C!\\n\n5. Secrets:\\nThere are 3 signs on the level where
-    you can read more about global warming"
+  m_text: "1. Goal:\\nCollect all 3 cherries to complete the level\\n\r\n2. Controls:\\n
+    A - LEFT\\n D - RIGHT \\nSPACE - JUMP & DOUBLEJUMP\\n \r\n3. Points:\\nCollect
+    gems and hearts, kill enemies and finish level below 3 minute mark for bonus
+    points\\n\r\n4. Warning:\\nBeware of the temperature. Finish level before it
+    hits 60\xB0C!\\n\n5. Secrets:\\nThere are 3 signs on the level where you can
+    read more about global warming"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dd7136862282e744684130cbfe15106d, type: 2}
   m_sharedMaterial: {fileID: -40660938559967673, guid: dd7136862282e744684130cbfe15106d, type: 2}
@@ -42283,7 +42283,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 19.8
+  m_fontSize: 20.8
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
