@@ -7,12 +7,17 @@ using System.Security.Cryptography;
 using UnityEngine.SceneManagement;
 using UnityEngine.Rendering.Universal;
 using static Unity.VisualScripting.Member;
+using UnityEditor;
 
 public enum GameState { GS_PAUSEMENU, GS_GAME, GS_LEVELCOMPLETED, GS_GAME_OVER, GS_OPTIONS, GS_DIALOGUE, GS_START }
+
+public enum Season {Winter, Spring, Summer }
 
 public class GameManager : MonoBehaviour
 {
     public GameState currentGameState = GameState.GS_START;
+
+    public Season currentSeason = Season.Winter;
 
     public Canvas inGameCanvas;
 
@@ -44,7 +49,7 @@ public class GameManager : MonoBehaviour
 
     public TMP_Text temperatureText;
 
-    private int temperature = 20;
+    private int temperature = -10;
 
     public Canvas pauseMenuCanvas;
 
@@ -61,8 +66,6 @@ public class GameManager : MonoBehaviour
     public TMP_Text HighScoreText;
 
     public Canvas optionsCanvas;
-
-    public GameObject optionsButton;
 
     public TMP_Text volumeText;
 
@@ -103,7 +106,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -130,10 +133,10 @@ public class GameManager : MonoBehaviour
                 {
                     offsetTimer = 0;
                     temperature++;
-                    SetTemperatureText();
+                    SetTemperature();
                 }
                 timeText.text = FormatTime(timer);
-                
+
             }
 
             if (Input.GetKeyDown(KeyCode.Space) && currentGameState == GameState.GS_DIALOGUE)
@@ -149,12 +152,12 @@ public class GameManager : MonoBehaviour
                 }
             }
 
-            #if UNITY_EDITOR
-                if (Input.GetKeyDown(KeyCode.G))
-                {
-                    immortalMode = !immortalMode;
-                }
-            #endif
+#if UNITY_EDITOR
+            if (Input.GetKeyDown(KeyCode.G))
+            {
+                immortalMode = !immortalMode;
+            }
+#endif
         }
     }
 
@@ -185,8 +188,6 @@ public class GameManager : MonoBehaviour
 
         SetVolume(volumeSlider);
 
-        DayLight.color = new Color(1f, 1f, 1f);
-
         dialogueLines = new string[2];
 
         source = GetComponent<AudioSource>();
@@ -215,6 +216,10 @@ public class GameManager : MonoBehaviour
         if (currentGameState == GameState.GS_GAME)
         {
             inGameCanvas.enabled = true;
+            Cursor.visible = false;
+        } else
+        {
+            Cursor.visible = true;
         }
         if (currentGameState == GameState.GS_LEVELCOMPLETED)
         {
@@ -234,7 +239,6 @@ public class GameManager : MonoBehaviour
         gameoverCanvas.enabled = (currentGameState == GameState.GS_GAME_OVER);
         dialogueCanvas.enabled = (currentGameState == GameState.GS_DIALOGUE);
         startScreenCanvas.enabled = (currentGameState == GameState.GS_START);
-        optionsButton.SetActive(currentGameState == GameState.GS_GAME);
     }
 
     public void PauseMenu()
@@ -245,11 +249,8 @@ public class GameManager : MonoBehaviour
 
     public void Options()
     {
-        if (currentGameState == GameState.GS_GAME)
-        {
-            SetGameState(GameState.GS_OPTIONS);
-            Time.timeScale = 0f;
-        }
+        SetGameState(GameState.GS_OPTIONS);
+        Time.timeScale = 0f;
     }
 
     public void QualityUp()
@@ -410,7 +411,7 @@ public class GameManager : MonoBehaviour
 
     public void AddKilledEnemy()
     {
-        enemyCount ++;
+        enemyCount++;
         enemyText.text = enemyCount.ToString();
     }
 
@@ -452,25 +453,39 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            InGame();         
+            InGame();
         }
     }
 
-    void SetTemperatureText()
+    void SetTemperature()
     {
         temperatureText.text = temperature + "°C";
-        if (temperature >= 30 && temperature < 45)
+        //Winter
+        if (temperature < 0)
         {
-            temperatureText.color = new Color(0.9f, 0.7f, 0);
+            temperatureText.color = new Color(0.03f, 0.5f, 0.6f);
+            DayLight.color = new Color(0.7f, 1f, 1f);
+            currentSeason = Season.Winter;
+            GetComponent<SeasonChanger>().changeSeason(0);
+        }
+        //Spring
+        else if (temperature >= 0 && temperature < 20)
+        {
+            temperatureText.color = new Color(0.03f, 0.6f, 0.03f);
+            DayLight.color = new Color(1f, 1f, 1f);
+            currentSeason = Season.Spring;
+            GetComponent<SeasonChanger>().changeSeason(1);
+        }
+        //Summer
+        else if (temperature >= 20 && temperature < 30)
+        {
+            temperatureText.color = new Color(1f, 0f, 0);
             DayLight.color = new Color(0.75f, 0.75f, 0.75f);
+            currentSeason = Season.Summer;
+            GetComponent<SeasonChanger>().changeSeason(2);
         }
-        else if (temperature >= 45 && temperature < 60)
+        else if (temperature >= 30)
         {
-            temperatureText.color = new Color(1, 0, 0);
-            DayLight.color = new Color(0.75f, 0.75f, 0.5f);
-        }
-        else if(temperature >= 60) 
-        {    
             temperatureText.color = new Color(0, 0, 0);
             GameOver();
         }

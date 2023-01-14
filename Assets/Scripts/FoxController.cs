@@ -107,6 +107,7 @@ public class FoxController : MonoBehaviour
 
             if (Input.GetKey(KeyCode.D) && !isWall(Vector2.right))
             {
+                rigidBody.velocity *= new Vector2(0, 1);
                 transform.Translate(moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
                 isWalking = true;
 
@@ -114,6 +115,7 @@ public class FoxController : MonoBehaviour
             }
             if (Input.GetKey(KeyCode.A) && !isWall(Vector2.left))
             {
+                rigidBody.velocity *= new Vector2(0, 1);
                 transform.Translate(-moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
                 isWalking = true;
 
@@ -244,6 +246,7 @@ public class FoxController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        Debug.Log(other.tag);
         if (other.CompareTag("Bonus"))
         {
             GameManager.instance.AddPoints(1);
