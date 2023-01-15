@@ -11,20 +11,22 @@ public class Door : MonoBehaviour
 
     Vector3 endPosition;
 
-    bool opening;
+    public bool isOpened;
 
 
     private void Update()
     {
-        if (opening)
+        if (isOpened)
         {
             this.transform.position = Vector2.MoveTowards(this.transform.position,
             endPosition, Time.deltaTime);
+            lockIcon.SetActive(false);
         }
         else
         {
             this.transform.position = Vector2.MoveTowards(this.transform.position,
             startPosition, Time.deltaTime);
+            lockIcon.SetActive(true);
         }
     }
     private void Awake()
@@ -40,14 +42,12 @@ public class Door : MonoBehaviour
     [ContextMenu("Open")]
     public void Open()
     {
-        opening = true;
-        lockIcon.SetActive(false);
+        isOpened = true;
     }
 
     [ContextMenu("Close")]
     public void Close()
     {
-        opening = false;
-        lockIcon.SetActive(true);
+        isOpened = false;
     }
 }

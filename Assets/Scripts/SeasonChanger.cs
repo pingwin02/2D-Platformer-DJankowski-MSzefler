@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 [System.Serializable]
@@ -35,7 +36,7 @@ public class SeasonChanger : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        FoxMaterial.color = new Color(255 / 255f, 247 / 255f, 210 / 255f);
     }
 
     // Update is called once per frame
@@ -46,6 +47,7 @@ public class SeasonChanger : MonoBehaviour
 
     public void changeSeason(int season)
     {
+
         if (season == ActiveTilePalette) return;
 
 
@@ -98,7 +100,6 @@ public class SeasonChanger : MonoBehaviour
             FoxMaterial.color = new Color(255 / 255f, 216 / 255f, 121 / 255f);
         if (season == 2)
             FoxMaterial.color = new Color(202 / 255f, 94 / 255f, 85 / 255f);
-
 
         ActiveTilePalette = season;
     }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
@@ -10,13 +11,21 @@ public class MainMenu : MonoBehaviour
 
     public Canvas howToPlayCanvas;
 
+    public Canvas levelSelectCanvas;
+
+    public Button level2Button;
+
     const string keyVolume = "VolumeSetting";
 
     const string keyQuality = "QualitySetting";
 
+    const string keyLevel2 = "Level2Unlocked";
+
     private void Awake()
     {
         howToPlayCanvas.enabled = false;
+
+        levelSelectCanvas.enabled = false;
 
         Time.timeScale = 1f;
 
@@ -24,12 +33,25 @@ public class MainMenu : MonoBehaviour
 
         AudioListener.volume = (float)PlayerPrefs.GetInt(keyVolume, 10) / 100;
 
+        level2Button.interactable = (PlayerPrefs.GetInt(keyLevel2, 0) == 1);
+
         StartCoroutine(seasonAnimator());
+    }
+
+    public void OnPlayButtonPressed()
+    {
+        mainMenuCanvas.enabled = false;
+        levelSelectCanvas.enabled = true;
     }
 
     public void OnLevel1ButtonPressed()
     {
         SceneManager.LoadSceneAsync("Level1");
+    }
+
+    public void OnLevel2ButtonPressed()
+    {
+        SceneManager.LoadSceneAsync("Level2");
     }
 
     public void OnExitToDesktopButtonPressed()
@@ -44,17 +66,20 @@ public class MainMenu : MonoBehaviour
     {
         mainMenuCanvas.enabled = false;
         howToPlayCanvas.enabled = true;
+        levelSelectCanvas.enabled = false;
     }
 
     public void OnResetPressed()
     {
         PlayerPrefs.DeleteAll();
+        level2Button.interactable = (PlayerPrefs.GetInt(keyLevel2, 0) == 1);
     }
 
     public void OnMainMenuButtonPressed()
     {
         mainMenuCanvas.enabled = true;
         howToPlayCanvas.enabled = false;
+        levelSelectCanvas.enabled = false;
     }
 
     IEnumerator seasonAnimator()

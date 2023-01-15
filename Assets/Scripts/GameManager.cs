@@ -57,9 +57,13 @@ public class GameManager : MonoBehaviour
 
     const string keyHighScore = "HighScoreLevel1";
 
+    const string keyHighScore2 = "HighScoreLevel2";
+
     const string keyVolume = "VolumeSetting";
 
     const string keyQuality = "QualitySetting";
+
+    const string keyLevel2 = "Level2Unlocked";
 
     public TMP_Text ScoreText;
 
@@ -178,6 +182,16 @@ public class GameManager : MonoBehaviour
             PlayerPrefs.SetInt(keyHighScore, 0);
         }
 
+        if (!PlayerPrefs.HasKey(keyHighScore2))
+        {
+            PlayerPrefs.SetInt(keyHighScore2, 0);
+        }
+
+        if (!PlayerPrefs.HasKey(keyLevel2))
+        {
+            PlayerPrefs.SetInt(keyLevel2, 0);
+        }
+
         QualitySettings.SetQualityLevel(PlayerPrefs.GetInt(keyQuality, QualitySettings.GetQualityLevel()));
 
         qualityText.text = "Quality: " + QualitySettings.names[QualitySettings.GetQualityLevel()];
@@ -205,6 +219,11 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name);
     }
 
+    public void OnLevel2ButtonPressed()
+    {
+        SceneManager.LoadSceneAsync("Level2");
+    }
+
     public void OnReturntoMainMenuButtonClicked()
     {
         SceneManager.LoadSceneAsync("MainMenu");
@@ -216,11 +235,19 @@ public class GameManager : MonoBehaviour
         if (currentGameState == GameState.GS_GAME)
         {
             inGameCanvas.enabled = true;
+        }
+
+        if (currentGameState == GameState.GS_GAME ||
+            currentGameState == GameState.GS_DIALOGUE ||
+            currentGameState == GameState.GS_START)
+        {
             Cursor.visible = false;
-        } else
+        }
+        else
         {
             Cursor.visible = true;
         }
+
         if (currentGameState == GameState.GS_LEVELCOMPLETED)
         {
             Scene currentScene = SceneManager.GetActiveScene();
@@ -230,6 +257,14 @@ public class GameManager : MonoBehaviour
                 if (highScore < score)
                 {
                     PlayerPrefs.SetInt(keyHighScore, score);
+                }
+            }
+            if (currentScene.name == "Level2")
+            {
+                int highScore = PlayerPrefs.GetInt(keyHighScore2);
+                if (highScore < score)
+                {
+                    PlayerPrefs.SetInt(keyHighScore2, score);
                 }
             }
         }
@@ -345,13 +380,17 @@ public class GameManager : MonoBehaviour
             SetGameState(GameState.GS_LEVELCOMPLETED);
             StartCoroutine(FadeWin());
             ScoreText.text += " = " + score;
-            HighScoreText.text = "Your best score: " + PlayerPrefs.GetInt(keyHighScore);
+            if (SceneManager.GetActiveScene().name == "Level1")
+                HighScoreText.text = "Your best score: " + PlayerPrefs.GetInt(keyHighScore);
+            if (SceneManager.GetActiveScene().name == "Level2")
+                HighScoreText.text = "Your best score: " + PlayerPrefs.GetInt(keyHighScore2);
             source.clip = null;
             source.PlayOneShot(levelCompletedMusic, 1);
+            PlayerPrefs.SetInt(keyLevel2, 1);
         }
         else
         {
-            dialogueLines[0] = "Collect all keys to finish the level!";
+            dialogueLines[0] = "Collect all cherries to complete the level!";
             dialogueLines[1] = "Remaining: " + (keysNumber - keysFound);
             StartDialogue();
         }
@@ -486,9 +525,8 @@ public class GameManager : MonoBehaviour
         }
         else if (temperature >= 30)
         {
-            //FoxMaterial.color = new Color(250/255f,68/255f,65/255f);
             temperatureText.color = new Color(0, 0, 0);
-            GameOver();
+            GameOver(); 
         }
     }
 }

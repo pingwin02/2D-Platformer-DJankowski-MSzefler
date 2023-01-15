@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 
 public class FoxController : MonoBehaviour
 {
@@ -297,7 +298,7 @@ public class FoxController : MonoBehaviour
         {
             skullsWarning = false;
             source.PlayOneShot(bonusSound, 2);
-            StartCoroutine(ShowObjects(doorObject, 3f));
+            StartCoroutine(ShowObjects(doorObject, 3.5f));
             other.gameObject.SetActive(false);
 
         }
@@ -308,7 +309,7 @@ public class FoxController : MonoBehaviour
         else if (other.CompareTag("DungeonTrap"))
         {
             skullsWarning = true;
-            StartCoroutine(ShowObjects(doorObject, 3f));
+            StartCoroutine(ShowObjects(doorObject, 3.5f));
             other.GetComponent<BoxCollider2D>().enabled = false;
         }
         else if (other.CompareTag("Sign1"))
