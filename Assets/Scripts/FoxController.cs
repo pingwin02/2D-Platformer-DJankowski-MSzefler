@@ -55,6 +55,8 @@ public class FoxController : MonoBehaviour
 
     public bool skullsWarning = false;
 
+    public bool tsunamiWarning = false;
+
     private Vector3 dungeonRespPoint;
 
     public GameObject[] startObjects;
@@ -70,6 +72,9 @@ public class FoxController : MonoBehaviour
         _collider = GetComponent<Collider2D>();
         _renderer = GetComponent<SpriteRenderer>();
         SetStartingPosition();
+
+        if (SceneManager.GetActiveScene().name == "Level2")
+            tsunamiWarning = true;
     
         StartCoroutine(ShowObjects(startObjects, 1.5f));
     }
@@ -89,6 +94,11 @@ public class FoxController : MonoBehaviour
             if (skullsWarning)
             {
                 GameManager.instance.DungeonWarning();
+            }
+            if (tsunamiWarning)
+            {
+                GameManager.instance.TsunamiWarning();
+                tsunamiWarning = false;
             }
             return;
         }
@@ -129,8 +139,8 @@ public class FoxController : MonoBehaviour
         }
         
         Debug.DrawRay(transform.position, rayLength * Vector3.down, Color.white, 1, false);
-        Debug.DrawRay(transform.position - new Vector3(0.3f, 0, 0), rayLength * Vector3.down, Color.white, 1, false);
-        Debug.DrawRay(transform.position + new Vector3(0.3f, 0, 0), rayLength * Vector3.down, Color.white, 1, false);
+        Debug.DrawRay(transform.position - new Vector3(0.45f, 0, 0), rayLength * Vector3.down, Color.white, 1, false);
+        Debug.DrawRay(transform.position + new Vector3(0.45f, 0, 0), rayLength * Vector3.down, Color.white, 1, false);
         Debug.DrawRay(transform.position, Vector2.right * rayLength2, Color.white, 1, false);
         Debug.DrawRay(transform.position, Vector2.left * rayLength2, Color.white, 1, false);
         
@@ -164,8 +174,8 @@ public class FoxController : MonoBehaviour
 
     bool isGrounded()
     {
-        return (Physics2D.Raycast(transform.position - new Vector3(0.3f, 0, 0), Vector2.down, rayLength, groundLayer.value) ||
-            Physics2D.Raycast(transform.position + new Vector3(0.3f, 0, 0), Vector2.down, rayLength, groundLayer.value) ||
+        return (Physics2D.Raycast(transform.position - new Vector3(0.45f, 0, 0), Vector2.down, rayLength, groundLayer.value) ||
+            Physics2D.Raycast(transform.position + new Vector3(0.45f, 0, 0), Vector2.down, rayLength, groundLayer.value) ||
             Physics2D.Raycast(this.transform.position, Vector2.down, rayLength, groundLayer.value));
     }
 
@@ -211,7 +221,8 @@ public class FoxController : MonoBehaviour
             rigidBody.velocity = Vector3.zero;
             MiniJump();
             GameManager.instance.AddHealth(-1);
-            StartCoroutine(RespawnPlayer());
+            if (GameManager.instance.currentGameState == GameState.GS_GAME)
+                StartCoroutine(RespawnPlayer());
         }
     }
 
@@ -404,6 +415,11 @@ public class FoxController : MonoBehaviour
         if (skullsWarning)
         {
             GameManager.instance.DungeonWarning();
+        }
+        if (tsunamiWarning)
+        {
+            GameManager.instance.TsunamiWarning();
+            tsunamiWarning = false;
         }
     }
 

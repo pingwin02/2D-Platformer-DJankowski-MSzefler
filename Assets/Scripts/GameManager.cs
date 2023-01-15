@@ -147,7 +147,7 @@ public class GameManager : MonoBehaviour
             {
                 if (dialogueText.text == dialogueLines[dialogueIndex])
                 {
-                    NextLine();
+                    StartCoroutine(NextLine());
                 }
                 else
                 {
@@ -242,7 +242,7 @@ public class GameManager : MonoBehaviour
         {
             inGameCanvas.enabled = true;
         }
-
+#if !UNITY_EDITOR
         if (currentGameState == GameState.GS_GAME ||
             currentGameState == GameState.GS_DIALOGUE ||
             currentGameState == GameState.GS_START)
@@ -253,7 +253,7 @@ public class GameManager : MonoBehaviour
         {
             Cursor.visible = true;
         }
-
+#endif
         if (currentGameState == GameState.GS_LEVELCOMPLETED)
         {
             Scene currentScene = SceneManager.GetActiveScene();
@@ -328,49 +328,33 @@ public class GameManager : MonoBehaviour
         dialogueLines[1] = "You are too afraid to double jump. Find a key to escape!";
         StartDialogue();
     }
+
+    public void TsunamiWarning()
+    {
+        dialogueLines[0] = "Be careful, melting glaciers have created a great tsunami.";
+        dialogueLines[1] = "Run Fox run!";
+        StartDialogue();
+    }
     public void SignInfo(int nr)
     {
-        if (SceneManager.GetActiveScene().name == "Level1")
+
+        switch (nr)
         {
-            switch (nr)
-            {
-                case 1:
-                    dialogueLines[0] = "Global warming is the long-term warming";
-                    dialogueLines[1] = "of the planet's overall temperature.";
-                    break;
-                case 2:
-                    dialogueLines[0] = "The greenhouse effect is when the sun's rays penetrate the atmosphere,";
-                    dialogueLines[1] = "but when that heat is reflected off the surface cannot escape back into space.";
-                    break;
-                case 3:
-                    dialogueLines[0] = "Global warming causes climate change, which poses a serious threat to life on Earth";
-                    dialogueLines[1] = "in the forms of widespread flooding and extreme weather.";
-                    break;
-                default: return;
+            case 1:
+                dialogueLines[0] = "Global warming is the long-term warming";
+                dialogueLines[1] = "of the planet's overall temperature.";
+                break;
+            case 2:
+                dialogueLines[0] = "The greenhouse effect is when the sun's rays penetrate the atmosphere,";
+                dialogueLines[1] = "but when that heat is reflected off the surface cannot escape back into space.";
+                break;
+            case 3:
+                dialogueLines[0] = "Global warming causes climate change, which poses a serious threat to life on Earth";
+                dialogueLines[1] = "in the forms of widespread flooding and extreme weather.";
+                break;
+            default: return;
 
-            } 
         }
-        if (SceneManager.GetActiveScene().name == "Level2")
-        {
-            switch (nr)
-            {
-                case 1:
-                    dialogueLines[0] = "Global warming is the long-term warming";
-                    dialogueLines[1] = "of the planet's overall temperature.";
-                    break;
-                case 2:
-                    dialogueLines[0] = "The greenhouse effect is when the sun's rays penetrate the atmosphere,";
-                    dialogueLines[1] = "but when that heat is reflected off the surface cannot escape back into space.";
-                    break;
-                case 3:
-                    dialogueLines[0] = "Global warming causes climate change, which poses a serious threat to life on Earth";
-                    dialogueLines[1] = "in the forms of widespread flooding and extreme weather.";
-                    break;
-                default: return;
-
-            }
-        }
-
 
         StartDialogue();
     }
@@ -513,7 +497,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void NextLine()
+    IEnumerator NextLine()
     {
         if (dialogueIndex < dialogueLines.Length - 1)
         {
@@ -522,6 +506,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            yield return new WaitForSeconds(0.1f);
             InGame();
         }
     }
