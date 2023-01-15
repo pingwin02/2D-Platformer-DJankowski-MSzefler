@@ -295,10 +295,10 @@ public class GameManager : MonoBehaviour
         {
             case 1:
                 dialogueLines[0] = "Global warming is the long-term warming";
-                dialogueLines[1] = "of the planet?s overall temperature.";
+                dialogueLines[1] = "of the planet's overall temperature.";
                 break;
             case 2:
-                dialogueLines[0] = "The greenhouse effect is when the sun?s rays penetrate the atmosphere,";
+                dialogueLines[0] = "The greenhouse effect is when the sun's rays penetrate the atmosphere,";
                 dialogueLines[1] = "but when that heat is reflected off the surface cannot escape back into space.";
                 break;
             case 3:
@@ -461,7 +461,7 @@ public class GameManager : MonoBehaviour
 
     void SetTemperature()
     {
-        temperatureText.text = temperature + "?C";
+        temperatureText.text = temperature + "°C";
         //Winter
         if (temperature < 0)
         {
