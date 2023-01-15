@@ -133,7 +133,7 @@ public class GameManager : MonoBehaviour
             {
                 timer += Time.deltaTime;
                 offsetTimer += Time.deltaTime;
-                if (offsetTimer > 5 || (immortalMode && offsetTimer > 1))
+                if (offsetTimer > 5 || (immortalMode && offsetTimer > 1) || (SceneManager.GetActiveScene().name == "Level2" && offsetTimer > 2))
                 {
                     offsetTimer = 0;
                     temperature++;
@@ -168,6 +168,11 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
+
+        if (SceneManager.GetActiveScene().name == "Level2")
+        {
+            health = 1;
+        }
 
         InGame();
 
@@ -207,6 +212,7 @@ public class GameManager : MonoBehaviour
         source = GetComponent<AudioSource>();
 
         source.volume = 1f;
+
     }
 
     public void OnResumeButtonClicked()
@@ -324,23 +330,47 @@ public class GameManager : MonoBehaviour
     }
     public void SignInfo(int nr)
     {
-        switch (nr)
+        if (SceneManager.GetActiveScene().name == "Level1")
         {
-            case 1:
-                dialogueLines[0] = "Global warming is the long-term warming";
-                dialogueLines[1] = "of the planet's overall temperature.";
-                break;
-            case 2:
-                dialogueLines[0] = "The greenhouse effect is when the sun's rays penetrate the atmosphere,";
-                dialogueLines[1] = "but when that heat is reflected off the surface cannot escape back into space.";
-                break;
-            case 3:
-                dialogueLines[0] = "Global warming causes climate change, which poses a serious threat to life on Earth";
-                dialogueLines[1] = "in the forms of widespread flooding and extreme weather.";
-                break;
-            default: return;
+            switch (nr)
+            {
+                case 1:
+                    dialogueLines[0] = "Global warming is the long-term warming";
+                    dialogueLines[1] = "of the planet's overall temperature.";
+                    break;
+                case 2:
+                    dialogueLines[0] = "The greenhouse effect is when the sun's rays penetrate the atmosphere,";
+                    dialogueLines[1] = "but when that heat is reflected off the surface cannot escape back into space.";
+                    break;
+                case 3:
+                    dialogueLines[0] = "Global warming causes climate change, which poses a serious threat to life on Earth";
+                    dialogueLines[1] = "in the forms of widespread flooding and extreme weather.";
+                    break;
+                default: return;
 
+            } 
         }
+        if (SceneManager.GetActiveScene().name == "Level2")
+        {
+            switch (nr)
+            {
+                case 1:
+                    dialogueLines[0] = "Global warming is the long-term warming";
+                    dialogueLines[1] = "of the planet's overall temperature.";
+                    break;
+                case 2:
+                    dialogueLines[0] = "The greenhouse effect is when the sun's rays penetrate the atmosphere,";
+                    dialogueLines[1] = "but when that heat is reflected off the surface cannot escape back into space.";
+                    break;
+                case 3:
+                    dialogueLines[0] = "Global warming causes climate change, which poses a serious threat to life on Earth";
+                    dialogueLines[1] = "in the forms of widespread flooding and extreme weather.";
+                    break;
+                default: return;
+
+            }
+        }
+
 
         StartDialogue();
     }

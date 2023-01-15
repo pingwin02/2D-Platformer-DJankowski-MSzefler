@@ -97,7 +97,7 @@ public class SeasonChanger : MonoBehaviour
         if (season == 0)
             FoxMaterial.color = new Color(255 / 255f, 247 / 255f, 210 / 255f);
         if (season == 1)
-            FoxMaterial.color = new Color(255 / 255f, 216 / 255f, 121 / 255f);
+            FoxMaterial.color = new Color(255 / 255f, 181 / 255f, 90 / 255f);
         if (season == 2)
             FoxMaterial.color = new Color(202 / 255f, 94 / 255f, 85 / 255f);
 

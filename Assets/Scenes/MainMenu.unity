@@ -1253,9 +1253,9 @@ MonoBehaviour:
     - {fileID: 21300000, guid: a5589c23aaf58a14aa3f856386ce4e09, type: 3}
     - {fileID: 21300000, guid: 4e44abb2be9d9454b841ce1588a26fec, type: 3}
   - List:
-    - {fileID: 21300000, guid: 8e160a2a620644cd6afef9119dad1093, type: 3}
-    - {fileID: 21300000, guid: 165e55e001b186e4687b6f1b1f1ea7cd, type: 3}
-    - {fileID: 21300000, guid: ec689248eb4d7f1408b3008a869ce12c, type: 3}
+    - {fileID: -1703828826, guid: 8e160a2a620644cd6afef9119dad1093, type: 3}
+    - {fileID: -1415355836, guid: 165e55e001b186e4687b6f1b1f1ea7cd, type: 3}
+    - {fileID: 1576325464, guid: ec689248eb4d7f1408b3008a869ce12c, type: 3}
   Trash: {fileID: 0}
   TrashShaders: []
   ToxicLights: []
@@ -1363,7 +1363,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6468088036027362595, guid: 2f2791ef89888624bb0e730e6258b462, type: 3}
       propertyPath: m_text
-      value: v 1.1
+      value: v 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 6468088036027362595, guid: 2f2791ef89888624bb0e730e6258b462, type: 3}
       propertyPath: m_fontSize
@@ -2362,7 +2362,7 @@ SpriteRenderer:
   m_SortingLayerID: 423123229
   m_SortingLayer: -1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 8e160a2a620644cd6afef9119dad1093, type: 3}
+  m_Sprite: {fileID: -1703828826, guid: 8e160a2a620644cd6afef9119dad1093, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -2382,8 +2382,8 @@ Transform:
   m_GameObject: {fileID: 1381653415}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 9
@@ -27632,8 +27632,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1481591384}
   m_HandleRect: {fileID: 1481591383}
   m_Direction: 2
-  m_Value: 1.0000024
-  m_Size: 0.4673727
+  m_Value: 1.0000001
+  m_Size: 0.40000007
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -27842,10 +27842,10 @@ RectTransform:
   m_Father: {fileID: 796714202}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -170.94383}
-  m_SizeDelta: {x: 545, y: 641.8861}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -225}
+  m_SizeDelta: {x: 550, y: 450}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2141504271
 MonoBehaviour:
@@ -27867,12 +27867,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "1. Goal:\\nCollect all 3 cherries to complete the level\\n\r\n2. Controls:\\n
-    A - LEFT\\n D - RIGHT \\nSPACE - JUMP & DOUBLEJUMP\\n \rESC - PAUSE\n3. Points:\\nCollect
-    gems and hearts, kill enemies by jumping on them and finish level below 3 minute
-    mark for bonus points\\n\r\n4. Warning:\\nBeware of the temperature. Finish level
-    before it hits 30\xB0C!\\n\n5. Secrets:\\nThere are 3 signs on the level where
-    you can read more about global warming"
+  m_text: "0. Plot:\\n\rYou have lost your family and global warming is changing
+    the world around you, even your fur. Find last precious cherries and reach your
+    home before it's too late!\\n\n1. Goal:\\nCollect all 3 cherries to complete
+    the level\\n\r\n2. Controls:\\n A - LEFT\\n D - RIGHT \\nSPACE - JUMP & DOUBLEJUMP\\n
+    \rESC - PAUSE\\n\r\n3. Points:\\nCollect gems and hearts, kill enemies by jumping
+    on them and finish level below 3 minute mark for bonus points\\n\r\n4. Warning:\\nBeware
+    of the temperature. Finish level before it hits 30\xB0C!\\n\n5. Secrets:\\nYou
+    may encounter signs where you can read more about global warming"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dd7136862282e744684130cbfe15106d, type: 2}
   m_sharedMaterial: {fileID: -40660938559967673, guid: dd7136862282e744684130cbfe15106d, type: 2}
@@ -27899,7 +27901,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20.8
+  m_fontSize: 19
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -27907,7 +27909,7 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 512
+  m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -27935,7 +27937,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 31.973656, z: 0, w: 37.170937}
+  m_margin: {x: 0, y: 19.250664, z: 0, w: 24.764366}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0

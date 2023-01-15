@@ -72,6 +72,8 @@ public class MainMenu : MonoBehaviour
     public void OnResetPressed()
     {
         PlayerPrefs.DeleteAll();
+        QualitySettings.SetQualityLevel(PlayerPrefs.GetInt(keyQuality, QualitySettings.GetQualityLevel()));
+        AudioListener.volume = (float)PlayerPrefs.GetInt(keyVolume, 10) / 100;
         level2Button.interactable = (PlayerPrefs.GetInt(keyLevel2, 0) == 1);
     }
 
