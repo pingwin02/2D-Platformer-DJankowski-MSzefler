@@ -29,6 +29,8 @@ public class SeasonChanger : MonoBehaviour
 
     public List<GameObject> TilePalettesList = new List<GameObject>();
 
+    public Material FoxMaterial;
+
 
     // Start is called before the first frame update
     void Start()
@@ -89,6 +91,13 @@ public class SeasonChanger : MonoBehaviour
         {
             ToxicLights[i].GetComponent<Light2D>().color = new Color(1, 0, 0);
         }
+
+        if (season == 0)
+            FoxMaterial.color = new Color(255 / 255f, 247 / 255f, 210 / 255f);
+        if (season == 1)
+            FoxMaterial.color = new Color(255 / 255f, 216 / 255f, 121 / 255f);
+        if (season == 2)
+            FoxMaterial.color = new Color(202 / 255f, 94 / 255f, 85 / 255f);
 
 
         ActiveTilePalette = season;

@@ -62,9 +62,9 @@ public class MainMenu : MonoBehaviour
         int n = 0;
         while (true)
         {
+            GetComponent<SeasonChanger>().changeSeason(n);
             n++;
             n %= 3;
-            GetComponent<SeasonChanger>().changeSeason(n);
             yield return new WaitForSeconds(1.5f);
         }
     }

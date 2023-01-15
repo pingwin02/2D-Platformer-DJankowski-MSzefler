@@ -11,7 +11,7 @@ using UnityEditor;
 
 public enum GameState { GS_PAUSEMENU, GS_GAME, GS_LEVELCOMPLETED, GS_GAME_OVER, GS_OPTIONS, GS_DIALOGUE, GS_START }
 
-public enum Season {Winter, Spring, Summer }
+public enum Season { Winter, Spring, Summer }
 
 public class GameManager : MonoBehaviour
 {
@@ -103,12 +103,10 @@ public class GameManager : MonoBehaviour
 
     public bool immortalMode = false;
 
-    public Material FoxMaterial;
-
     // Start is called before the first frame update
     void Start()
     {
-        FoxMaterial.color = new Color(255 / 255f, 247 / 255f, 210 / 255f);
+        
     }
 
     // Update is called once per frame
@@ -465,7 +463,6 @@ public class GameManager : MonoBehaviour
         //Winter
         if (temperature < 0)
         {
-            FoxMaterial.color = new Color(255/255f, 247/255f, 210/255f);
             temperatureText.color = new Color(0.03f, 0.5f, 0.6f);
             DayLight.color = new Color(0.7f, 1f, 1f);
             currentSeason = Season.Winter;
@@ -474,7 +471,6 @@ public class GameManager : MonoBehaviour
         //Spring
         else if (temperature >= 0 && temperature < 20)
         {
-            FoxMaterial.color = new Color(255 / 255f, 216 / 255f, 121 / 255f);
             temperatureText.color = new Color(0.03f, 0.6f, 0.03f);
             DayLight.color = new Color(1f, 1f, 1f);
             currentSeason = Season.Spring;
@@ -483,7 +479,6 @@ public class GameManager : MonoBehaviour
         //Summer
         else if (temperature >= 20 && temperature < 30)
         {
-            FoxMaterial.color = new Color(202 / 255f, 94 / 255f, 85 / 255f);
             temperatureText.color = new Color(1f, 0f, 0);
             DayLight.color = new Color(0.75f, 0.75f, 0.75f);
             currentSeason = Season.Summer;
@@ -491,7 +486,7 @@ public class GameManager : MonoBehaviour
         }
         else if (temperature >= 30)
         {
-            FoxMaterial.color = new Color(250/255f,68/255f,65/255f);
+            //FoxMaterial.color = new Color(250/255f,68/255f,65/255f);
             temperatureText.color = new Color(0, 0, 0);
             GameOver();
         }
