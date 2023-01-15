@@ -103,10 +103,12 @@ public class GameManager : MonoBehaviour
 
     public bool immortalMode = false;
 
+    public Material FoxMaterial;
+
     // Start is called before the first frame update
     void Start()
     {
-
+        FoxMaterial.color = new Color(255 / 255f, 247 / 255f, 210 / 255f);
     }
 
     // Update is called once per frame
@@ -293,10 +295,10 @@ public class GameManager : MonoBehaviour
         {
             case 1:
                 dialogueLines[0] = "Global warming is the long-term warming";
-                dialogueLines[1] = "of the planet’s overall temperature.";
+                dialogueLines[1] = "of the planet?s overall temperature.";
                 break;
             case 2:
-                dialogueLines[0] = "The greenhouse effect is when the sun’s rays penetrate the atmosphere,";
+                dialogueLines[0] = "The greenhouse effect is when the sun?s rays penetrate the atmosphere,";
                 dialogueLines[1] = "but when that heat is reflected off the surface cannot escape back into space.";
                 break;
             case 3:
@@ -459,10 +461,11 @@ public class GameManager : MonoBehaviour
 
     void SetTemperature()
     {
-        temperatureText.text = temperature + "°C";
+        temperatureText.text = temperature + "?C";
         //Winter
         if (temperature < 0)
         {
+            FoxMaterial.color = new Color(255/255f, 247/255f, 210/255f);
             temperatureText.color = new Color(0.03f, 0.5f, 0.6f);
             DayLight.color = new Color(0.7f, 1f, 1f);
             currentSeason = Season.Winter;
@@ -471,6 +474,7 @@ public class GameManager : MonoBehaviour
         //Spring
         else if (temperature >= 0 && temperature < 20)
         {
+            FoxMaterial.color = new Color(255 / 255f, 216 / 255f, 121 / 255f);
             temperatureText.color = new Color(0.03f, 0.6f, 0.03f);
             DayLight.color = new Color(1f, 1f, 1f);
             currentSeason = Season.Spring;
@@ -479,6 +483,7 @@ public class GameManager : MonoBehaviour
         //Summer
         else if (temperature >= 20 && temperature < 30)
         {
+            FoxMaterial.color = new Color(202 / 255f, 94 / 255f, 85 / 255f);
             temperatureText.color = new Color(1f, 0f, 0);
             DayLight.color = new Color(0.75f, 0.75f, 0.75f);
             currentSeason = Season.Summer;
@@ -486,6 +491,7 @@ public class GameManager : MonoBehaviour
         }
         else if (temperature >= 30)
         {
+            FoxMaterial.color = new Color(250/255f,68/255f,65/255f);
             temperatureText.color = new Color(0, 0, 0);
             GameOver();
         }
