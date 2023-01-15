@@ -355,16 +355,8 @@ public class GameManager : MonoBehaviour
             switch (nr)
             {
                 case 1:
-                    dialogueLines[0] = "Global warming is the long-term warming";
-                    dialogueLines[1] = "of the planet's overall temperature.";
-                    break;
-                case 2:
-                    dialogueLines[0] = "The greenhouse effect is when the sun's rays penetrate the atmosphere,";
-                    dialogueLines[1] = "but when that heat is reflected off the surface cannot escape back into space.";
-                    break;
-                case 3:
-                    dialogueLines[0] = "Global warming causes climate change, which poses a serious threat to life on Earth";
-                    dialogueLines[1] = "in the forms of widespread flooding and extreme weather.";
+                    dialogueLines[0] = "Be careful, melting glaciers have created a great tsunami.";
+                    dialogueLines[1] = "Run Fox run!";
                     break;
                 default: return;
 
