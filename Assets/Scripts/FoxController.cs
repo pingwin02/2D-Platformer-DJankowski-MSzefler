@@ -327,6 +327,20 @@ public class FoxController : MonoBehaviour
             GameManager.instance.SignInfo(3);
             other.GetComponent<BoxCollider2D>().enabled = false;
         }
+        else if (other.CompareTag("Boss"))
+        {
+            if (transform.position.y - 0.8 > other.gameObject.transform.position.y)
+            {
+                animator.SetBool("didKill", true);
+                MiniJump();
+                MiniJump();
+                source.PlayOneShot(killSound, 25);
+            }
+            else
+            {
+                Die();
+            }
+        }
     }
 
     private void OnTriggerExit2D(Collider2D other)
