@@ -36,7 +36,7 @@ public class SeasonChanger : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        FoxMaterial.color = new Color(255 / 255f, 247 / 255f, 210 / 255f);
+        FoxMaterial.color = new Color(0.85f, 0.85f, 0.8f);
     }
 
     // Update is called once per frame
@@ -95,7 +95,7 @@ public class SeasonChanger : MonoBehaviour
         }
 
         if (season == 0)
-            FoxMaterial.color = new Color(255 / 255f, 247 / 255f, 210 / 255f);
+            FoxMaterial.color = new Color(0.85f, 0.85f, 0.8f);
         if (season == 1)
             FoxMaterial.color = new Color(255 / 255f, 181 / 255f, 90 / 255f);
         if (season == 2)

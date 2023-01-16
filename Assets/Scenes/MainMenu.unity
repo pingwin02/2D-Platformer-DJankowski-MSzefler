@@ -27632,8 +27632,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1481591384}
   m_HandleRect: {fileID: 1481591383}
   m_Direction: 2
-  m_Value: 1.0000001
-  m_Size: 0.40000007
+  m_Value: 1
+  m_Size: 0.4
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -27873,7 +27873,7 @@ MonoBehaviour:
     the level\\n\r\n2. Controls:\\n A - LEFT\\n D - RIGHT \\nSPACE - JUMP & DOUBLEJUMP\\n
     \rESC - PAUSE\\n\r\n3. Points:\\nCollect gems and hearts, kill enemies by jumping
     on them and finish level below 3 minute mark for bonus points\\n\r\n4. Warning:\\nBeware
-    of the temperature. Finish level before it hits 30\xB0C!\\n\n5. Secrets:\\nYou
+    of the temperature. Finish level before it hits 40\xB0C!\\n\n5. Secrets:\\nYou
     may encounter signs where you can read more about global warming"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dd7136862282e744684130cbfe15106d, type: 2}

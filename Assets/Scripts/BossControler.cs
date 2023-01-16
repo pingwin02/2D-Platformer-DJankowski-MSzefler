@@ -55,6 +55,7 @@ public class BossControler : MonoBehaviour
 
     private void Update()
     {
+        key.transform.position = new Vector2(transform.position.x, transform.position.y + 1.0f);
         if ( Vector2.Distance(rigidBody.transform.position, playerPos.position) <= 20f)
         {
             healthBarCanvas.enabled = true;
@@ -81,8 +82,6 @@ public class BossControler : MonoBehaviour
                 anim.SetBool("isDead", true);
                 StartCoroutine(KillOnAnimationEnd());
             }
-
-            key.transform.position = new Vector2(transform.position.x, transform.position.y + 1.0f);
 
             // give the player some time to recover before taking more damage !
             if (timeBtwDamage > 0)

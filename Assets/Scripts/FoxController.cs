@@ -4,6 +4,7 @@ using System.Globalization;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
+using UnityEngine.EventSystems;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 
@@ -53,11 +54,15 @@ public class FoxController : MonoBehaviour
 
     public bool inDungeon = false;
 
+    public bool afterWave = false;
+
     public bool skullsWarning = false;
 
     public bool tsunamiWarning = false;
 
-    private Vector3 dungeonRespPoint;
+    public GameObject dungeonRespPoint;
+
+    public GameObject afterWaveRespPoint;
 
     public GameObject[] startObjects;
 
@@ -147,6 +152,9 @@ public class FoxController : MonoBehaviour
 
         StartCoroutine(switchLight());
 
+        if (!afterWave && transform.position.x > 175)
+            afterWave = true;
+
         animator.SetBool("isWalking", isWalking);
         animator.SetBool("isGrounded", isGrounded());
         animator.SetBool("isDead", false);
@@ -209,6 +217,11 @@ public class FoxController : MonoBehaviour
         rigidBody.velocity = new Vector3(rigidBody.velocity.x, jumpForce / 2);
     }
 
+    private void Knockback()
+    {
+        rigidBody.velocity = new Vector3(rigidBody.velocity.x + 10 * Random.value, jumpForce);
+    }
+
     public void Die()
     {
         if (!GameManager.instance.immortalMode && GameManager.instance.currentGameState == GameState.GS_GAME)
@@ -231,7 +244,11 @@ public class FoxController : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
         if (inDungeon)
         {
-            transform.position = dungeonRespPoint;
+            transform.position = dungeonRespPoint.transform.position;
+        }
+        else if (afterWave)
+        {
+            transform.position = afterWaveRespPoint.transform.position;
         }
         else
         {
@@ -245,7 +262,6 @@ public class FoxController : MonoBehaviour
     public void SetStartingPosition()
     {
         startPosition = transform.position;
-        dungeonRespPoint = new Vector3(-35, 2, -2);
     }
 
     private void Flip()
@@ -338,14 +354,19 @@ public class FoxController : MonoBehaviour
             GameManager.instance.SignInfo(3);
             other.GetComponent<BoxCollider2D>().enabled = false;
         }
+        else if (other.CompareTag("SignTsunami"))
+        {
+            GameManager.instance.TsunamiGoneWarning();
+            other.GetComponent<BoxCollider2D>().enabled = false;
+        }
         else if (other.CompareTag("Boss"))
         {
             if (transform.position.y - 0.8 > other.gameObject.transform.position.y)
             {
+                Knockback();
                 animator.SetBool("didKill", true);
-                MiniJump();
-                MiniJump();
                 source.PlayOneShot(killSound, 25);
+                GameManager.instance.AddKilledEnemy();
             }
             else
             {

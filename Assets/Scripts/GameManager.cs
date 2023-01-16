@@ -133,7 +133,7 @@ public class GameManager : MonoBehaviour
             {
                 timer += Time.deltaTime;
                 offsetTimer += Time.deltaTime;
-                if (offsetTimer > 5 || (immortalMode && offsetTimer > 1) || (SceneManager.GetActiveScene().name == "Level2" && offsetTimer > 2))
+                if (offsetTimer > 5 || (immortalMode && offsetTimer > 1) || (SceneManager.GetActiveScene().name == "Level2" && offsetTimer > 3))
                 {
                     offsetTimer = 0;
                     temperature++;
@@ -335,6 +335,13 @@ public class GameManager : MonoBehaviour
         dialogueLines[1] = "Run Fox run!";
         StartDialogue();
     }
+
+    public void TsunamiGoneWarning()
+    {
+        dialogueLines[0] = "Congratulations, the tsunami is slowly falling!";
+        dialogueLines[1] = "You can collect the remaining cherries!";
+        StartDialogue();
+    }
     public void SignInfo(int nr)
     {
 
@@ -531,14 +538,14 @@ public class GameManager : MonoBehaviour
             GetComponent<SeasonChanger>().changeSeason(1);
         }
         //Summer
-        else if (temperature >= 20 && temperature < 30)
+        else if (temperature >= 20 && temperature < 40)
         {
             temperatureText.color = new Color(1f, 0f, 0);
             DayLight.color = new Color(0.75f, 0.75f, 0.75f);
             currentSeason = Season.Summer;
             GetComponent<SeasonChanger>().changeSeason(2);
         }
-        else if (temperature >= 30)
+        else if (temperature >= 40)
         {
             temperatureText.color = new Color(0, 0, 0);
             GameOver(); 
